@@ -3,16 +3,16 @@ import 'package:runconnect/shared/sign_in_header.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/theme.dart';
-import 'package:runconnect/welcome/sign_up.dart';
+import 'package:runconnect/welcome/sign_in.dart';
 
-class SignInForm extends StatefulWidget {
-  const SignInForm({super.key});
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({super.key});
 
   @override
-  State<SignInForm> createState() => _SignInFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignInFormState extends State<SignInForm> {
+class _SignUpFormState extends State<SignUpForm> {
   final _formGlobalKey = GlobalKey<FormState>();
 
   @override
@@ -24,7 +24,7 @@ class _SignInFormState extends State<SignInForm> {
           const SignInHeader(),
           const Padding(
             padding: EdgeInsets.only(top: 20),
-            child: StyledTitle("Sign In"),
+            child: StyledTitle("Sign Up"),
           ),
           Form(
               key: _formGlobalKey,
@@ -69,18 +69,18 @@ class _SignInFormState extends State<SignInForm> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const StyledText("Don't have an account? "),
+                        const StyledText("Already have an account? "),
                         TextButton(
                           onPressed: () {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (ctx) => const SignUpForm()));
+                                    builder: (ctx) => const SignInForm()));
                           },
                           style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 2, vertical: 1)),
-                          child: Text("Sign up here",
+                          child: Text("Sign in here",
                               style: TextStyle(
                                   fontFamily: "Cabin",
                                   color: AppColors.textColor,
@@ -89,7 +89,7 @@ class _SignInFormState extends State<SignInForm> {
                         )
                       ],
                     ),
-                    const StyledText("Or sign in with"),
+                    const StyledText("Or sign up with"),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: IconButton(

@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:runconnect/theme.dart';
 
 class StyledButton extends StatelessWidget {
-  const StyledButton({required this.text, required this.color, super.key});
+  const StyledButton(
+      {required this.text,
+      required this.color,
+      required this.onPressed,
+      super.key});
   final String text;
   final String color;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,7 @@ class StyledButton extends StatelessWidget {
         backgroundColor: color == "blue" ? AppColors.textColor : Colors.white,
         side: BorderSide(color: AppColors.textColor, width: 1),
       ),
-      onPressed: () {},
+      onPressed: onPressed,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Text(text,

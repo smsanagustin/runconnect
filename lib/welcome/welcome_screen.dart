@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:runconnect/shared/styled_text.dart';
+import 'package:runconnect/welcome/sign_in.dart';
+import 'package:runconnect/welcome/sign_up.dart';
 
 import '../shared/styled_button.dart';
 
@@ -33,15 +35,33 @@ class WelcomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 60,
               ),
-              const SizedBox(
+              SizedBox(
                   width: double.infinity,
-                  child: StyledButton(text: "Sign up", color: "blue")),
+                  child: StyledButton(
+                    text: "Sign up",
+                    color: "blue",
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => const SignUpForm()));
+                    },
+                  )),
               const SizedBox(
                 height: 12,
               ),
-              const SizedBox(
+              SizedBox(
                   width: double.infinity,
-                  child: StyledButton(text: "Sign in", color: "white"))
+                  child: StyledButton(
+                    text: "Sign in",
+                    color: "white",
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => const SignInForm()));
+                    },
+                  ))
             ],
           ),
         ),
