@@ -9,7 +9,7 @@ class StyledText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(text,
         style: TextStyle(
-            fontFamily: "Cabin", color: AppColors.textColor, fontSize: 20));
+            fontFamily: "Cabin", color: AppColors.textColor, fontSize: 15));
   }
 }
 
@@ -20,7 +20,10 @@ class StyledTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text,
-        style: const TextStyle(
-            fontFamily: "Cabin", fontSize: 30, fontWeight: FontWeight.bold));
+        style: TextStyle(
+            fontFamily: "Cabin",
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textColor));
   }
 }

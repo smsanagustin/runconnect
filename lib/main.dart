@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:runconnect/welcome/sign_in.dart';
 import 'package:runconnect/welcome/welcome_screen.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const WelcomeScreen(),
+      home: const SignInForm(),
     );
   }
 }
