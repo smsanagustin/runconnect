@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:runconnect/theme.dart';
+
+class StyledText extends StatelessWidget {
+  const StyledText(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        style: TextStyle(
+            fontFamily: "Cabin", color: AppColors.textColor, fontSize: 20));
+  }
+}
+
+class StyledTitle extends StatelessWidget {
+  const StyledTitle(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        style: const TextStyle(
+            fontFamily: "Cabin", fontSize: 30, fontWeight: FontWeight.bold));
+  }
+}
