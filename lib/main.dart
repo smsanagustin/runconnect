@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:runconnect/shared/styled_button.dart';
-import 'package:runconnect/shared/styled_text.dart';
+import 'package:runconnect/welcome/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,43 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: Scaffold(
-          body: Center(
-        child: Column(children: [
-          Container(
-              margin: const EdgeInsets.only(top: 150),
-              child: const StyledTitle("RunConnect")),
-          const StyledText("Welcome, runner!"),
-          const SizedBox(
-            height: 50,
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 70),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                      "assets/logos/runconnect_logo_blue_on_blue.png",
-                      fit: BoxFit.fill),
-                ),
-                const SizedBox(
-                  height: 60,
-                ),
-                const SizedBox(
-                    width: double.infinity,
-                    child: StyledButton(text: "Sign up", color: "blue")),
-                const SizedBox(
-                  height: 12,
-                ),
-                const SizedBox(
-                    width: double.infinity,
-                    child: StyledButton(text: "Sign in", color: "white"))
-              ],
-            ),
-          ),
-        ]),
-      )),
+      home: const WelcomeScreen(),
     );
   }
 }
