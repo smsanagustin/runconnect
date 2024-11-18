@@ -34,37 +34,57 @@ class _SignInFormState extends State<SignInForm> {
                 child: Column(
                   children: [
                     TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          label: const Text("Email address"),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: AppColors.textColor, width: 2.0)),
-                        )),
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        label: const Text("Email address"),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: AppColors.textColor, width: 2.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.length < 4) {
+                          return "You must input your email to log in.";
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          label: const Text("Password"),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: AppColors.textColor, width: 2.0)),
-                        )),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        label: const Text("Password"),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: AppColors.textColor, width: 2.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.length < 4) {
+                          return "You must input a password.";
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
                     StyledButton(
                       text: "Let's go!",
                       color: "blue",
-                      onPressed: () {},
+                      onPressed: () {
+                        _formGlobalKey.currentState!.validate();
+                      },
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
