@@ -14,6 +14,8 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final _formGlobalKey = GlobalKey<FormState>();
+  String _emailAddress = "";
+  String _password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -34,25 +36,25 @@ class _SignInFormState extends State<SignInForm> {
                 child: Column(
                   children: [
                     TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        label: const Text("Email address"),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: AppColors.textColor, width: 2.0)),
-                      ),
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty ||
-                            value.length < 4) {
-                          return "You must input your email to log in.";
-                        }
-                        return null;
-                      },
-                    ),
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          label: const Text("Email address"),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                  color: AppColors.textColor, width: 2.0)),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "You must input your email to log in.";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _emailAddress = value!;
+                        }),
                     const SizedBox(
                       height: 10,
                     ),
@@ -68,12 +70,13 @@ class _SignInFormState extends State<SignInForm> {
                                 color: AppColors.textColor, width: 2.0)),
                       ),
                       validator: (value) {
-                        if (value == null ||
-                            value.isEmpty ||
-                            value.length < 4) {
+                        if (value == null || value.isEmpty) {
                           return "You must input a password.";
                         }
                         return null;
+                      },
+                      onSaved: (value) {
+                        _password = value!;
                       },
                     ),
                     const SizedBox(
@@ -83,7 +86,11 @@ class _SignInFormState extends State<SignInForm> {
                       text: "Let's go!",
                       color: "blue",
                       onPressed: () {
-                        _formGlobalKey.currentState!.validate();
+                        if (_formGlobalKey.currentState!.validate()) {
+                          _formGlobalKey.currentState!.save();
+                          print(_emailAddress);
+                          print(_password);
+                        }
                       },
                     ),
                     Row(

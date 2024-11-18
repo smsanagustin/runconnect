@@ -15,6 +15,9 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   final _formGlobalKey = GlobalKey<FormState>();
   final _errorMessage = "";
+  String _emailAddress = "";
+  String _username = "";
+  String _password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,9 @@ class _SignUpFormState extends State<SignUpForm> {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        _emailAddress = value!;
+                      },
                     ),
                     const SizedBox(
                       height: 10,
@@ -70,6 +76,9 @@ class _SignUpFormState extends State<SignUpForm> {
                           return "You must input a username.";
                         }
                         return null;
+                      },
+                      onSaved: (value) {
+                        _username = value!;
                       },
                     ),
                     const SizedBox(
@@ -94,6 +103,9 @@ class _SignUpFormState extends State<SignUpForm> {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        _password = value!;
+                      },
                     ),
                     const SizedBox(
                       height: 20,
@@ -103,8 +115,9 @@ class _SignUpFormState extends State<SignUpForm> {
                       text: "Let's go!",
                       color: "blue",
                       onPressed: () {
-                        _formGlobalKey.currentState!.validate();
-                        print("something's happening");
+                        if (_formGlobalKey.currentState!.validate()) {
+                          _formGlobalKey.currentState!.save();
+                        }
                       },
                     ),
                     Row(
