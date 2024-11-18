@@ -8,6 +8,7 @@ class AppColors {
   // static Color titleColor = const Color.fromRGBO(200, 200, 200, 1);
   static Color textColor = const Color.fromRGBO(24, 75, 108, 1);
   static Color successColor = const Color.fromRGBO(9, 149, 110, 1);
+  static Color errorColor = const Color.fromRGBO(222, 90, 78, 1);
   static Color highlightColor = const Color.fromRGBO(212, 172, 13, 1);
 }
 

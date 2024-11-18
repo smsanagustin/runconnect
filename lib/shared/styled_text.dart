@@ -7,9 +7,27 @@ class StyledText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text,
-        style: TextStyle(
-            fontFamily: "Cabin", color: AppColors.textColor, fontSize: 15));
+    return Text(
+      text,
+      style: TextStyle(
+          fontFamily: "Cabin", color: AppColors.textColor, fontSize: 15),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class StyledErrorText extends StatelessWidget {
+  const StyledErrorText(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+          fontFamily: "Cabin", color: AppColors.errorColor, fontSize: 15),
+      textAlign: TextAlign.center,
+    );
   }
 }
 

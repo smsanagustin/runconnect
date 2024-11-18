@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "712557479811",
+    "project_id": "run-connect-0501",
+    "storage_bucket": "run-connect-0501.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712557479811:android:03116f76909db361b958b6",
+        "android_client_info": {
+          "package_name": "com.runconnect.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdix96pZ8GRaaLDYjJgjiv6JtELVLl930"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

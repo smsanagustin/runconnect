@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:runconnect/services/auth_service.dart';
 import 'package:runconnect/shared/sign_in_header.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/shared/styled_button.dart';
@@ -14,7 +15,7 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formGlobalKey = GlobalKey<FormState>();
-  final _errorMessage = "";
+  String _errorMessage = "";
   String _emailAddress = "";
   String _username = "";
   String _password = "";
@@ -110,13 +111,35 @@ class _SignUpFormState extends State<SignUpForm> {
                     const SizedBox(
                       height: 20,
                     ),
-                    if (_errorMessage.isNotEmpty) StyledText(_errorMessage),
+                    if (_errorMessage.isNotEmpty)
+                      Column(
+                        children: [
+                          StyledErrorText(_errorMessage),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
                     StyledButton(
                       text: "Let's go!",
                       color: "blue",
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formGlobalKey.currentState!.validate()) {
+                          setState(() {
+                            _errorMessage = "";
+                          });
                           _formGlobalKey.currentState!.save();
+
+                          final user = await AuthService.signUpUser(
+                              _emailAddress, _password);
+                          if (user == null) {
+                            setState(() {
+                              _errorMessage =
+                                  "Invalid sign up details. Please check your email and password then try again.";
+                            });
+                          } else {
+                            _formGlobalKey.currentState!.reset();
+                          }
                         }
                       },
                     ),

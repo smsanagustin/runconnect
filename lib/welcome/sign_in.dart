@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:runconnect/services/auth_service.dart';
 import 'package:runconnect/shared/sign_in_header.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/shared/styled_button.dart';
@@ -14,6 +15,7 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final _formGlobalKey = GlobalKey<FormState>();
+  String _errorMessage = "";
   String _emailAddress = "";
   String _password = "";
 
@@ -82,14 +84,38 @@ class _SignInFormState extends State<SignInForm> {
                     const SizedBox(
                       height: 20,
                     ),
+                    if (_errorMessage.isNotEmpty)
+                      Column(
+                        children: [
+                          StyledErrorText(_errorMessage),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
                     StyledButton(
                       text: "Let's go!",
                       color: "blue",
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formGlobalKey.currentState!.validate()) {
+                          // clear the error message
+                          setState(() {
+                            _errorMessage = "";
+                          });
+
                           _formGlobalKey.currentState!.save();
-                          print(_emailAddress);
-                          print(_password);
+
+                          // contact firebase to authenticate user
+                          final user = await AuthService.signInUser(
+                              _emailAddress, _password);
+                          if (user == null) {
+                            setState(() {
+                              _errorMessage =
+                                  "Cannot sign in. Please check your email and password then try again.";
+                            });
+                          } else {
+                            _formGlobalKey.currentState!.reset();
+                          }
                         }
                       },
                     ),

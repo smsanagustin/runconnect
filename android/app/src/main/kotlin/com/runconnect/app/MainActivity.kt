@@ -1,4 +1,4 @@
-package com.example.runconnect
+package com.runconnect.app
 
 import io.flutter.embedding.android.FlutterActivity
 
