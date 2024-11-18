@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/providers/profile_provider.dart';
+import 'package:runconnect/screens/home/feed.dart';
 import 'package:runconnect/services/auth_service.dart';
 import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/shared/styled_text.dart';
+import 'package:runconnect/theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -13,24 +15,49 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    final appUser = ref.watch(profileNotifierProvider);
-
     return Scaffold(
-        appBar: AppBar(
-            title: appUser.isNotEmpty
-                ? StyledTitle("Hi, ${appUser.first.username}!")
-                : const Text("")),
-        body: Column(
-          children: [
-            StyledButton(
-                text: "Log out",
-                color: "blue",
-                onPressed: () {
-                  AuthService.signOut();
-                })
+        bottomNavigationBar: NavigationBar(
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          backgroundColor: Colors.white,
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          indicatorColor: AppColors.primaryColor,
+          selectedIndex: currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              selectedIcon: Icon(Icons.home),
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.person_add),
+              icon: Icon(Icons.person_add_outlined),
+              label: 'Add',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.add_box),
+              icon: Icon(Icons.add_box_outlined),
+              label: 'Host',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.account_circle),
+              icon: Icon(Icons.account_circle_outlined),
+              label: 'Profile',
+            ),
           ],
-        ));
+        ),
+        body: <Widget>[
+          const FeedScreen(),
+          const Text("todo"),
+          const Text("todo"),
+          const Text("todo")
+        ][currentPageIndex]);
   }
 }
