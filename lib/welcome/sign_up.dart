@@ -146,6 +146,10 @@ class _SignUpFormState extends State<SignUpForm> {
                                 });
                               } else {
                                 _formGlobalKey.currentState!.reset();
+
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                }
                               }
                             }, (error) {
                               setState(() {
