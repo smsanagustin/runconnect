@@ -14,6 +14,7 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formGlobalKey = GlobalKey<FormState>();
+  final _errorMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -34,50 +35,77 @@ class _SignUpFormState extends State<SignUpForm> {
                 child: Column(
                   children: [
                     TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          label: const Text("Email address"),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: AppColors.textColor, width: 2.0)),
-                        )),
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        label: const Text("Email address"),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: AppColors.textColor, width: 2.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "You must input an email address.";
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                        decoration: InputDecoration(
-                      label: const Text("Username"),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              color: AppColors.textColor, width: 2.0)),
-                    )),
+                      decoration: InputDecoration(
+                        label: const Text("Username"),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: AppColors.textColor, width: 2.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "You must input a username.";
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          label: const Text("Password"),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: AppColors.textColor, width: 2.0)),
-                        )),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        label: const Text("Password"),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: AppColors.textColor, width: 2.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.length < 4) {
+                          return "Invalid password.";
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
+                    if (_errorMessage.isNotEmpty) StyledText(_errorMessage),
                     StyledButton(
                       text: "Let's go!",
                       color: "blue",
-                      onPressed: () {},
+                      onPressed: () {
+                        _formGlobalKey.currentState!.validate();
+                        print("something's happening");
+                      },
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
