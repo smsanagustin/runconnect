@@ -7,7 +7,10 @@ final authProvider = StreamProvider.autoDispose<AppUser?>((ref) async* {
   final Stream<AppUser?> userStream =
       FirebaseAuth.instance.authStateChanges().map((user) {
     if (user != null) {
-      return AppUser(email: user.email!, uid: user.uid);
+      // TODO: instead of creating a new instance of AppUser, go to Firestore and select the
+      // existing AppUser and return that instead.
+      return AppUser(
+          email: user.email!, uid: user.uid, username: "Placeholder for now");
     }
     return null;
   });

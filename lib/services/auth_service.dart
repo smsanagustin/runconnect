@@ -5,23 +5,26 @@ import 'package:runconnect/models/app_user.dart';
 class AuthService {
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  // sing up a new user
+  // sign up a new user
   static Future<Either<AppUser?, String>> signUpUser(
-      String email, String password) async {
+      String email, String password, String username) async {
     try {
       final UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
+
+      // create a new AppUser instance if account is created successfully
       if (userCredential.user != null) {
         return Left(AppUser(
-            email: userCredential.user!.email!, uid: userCredential.user!.uid));
+            email: userCredential.user!.email!,
+            uid: userCredential.user!.uid,
+            username: username));
       }
+
       return const Right('Unknown error occured.');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        // Handle the case when the email is already in use
         return const Right('Email already exists. Try signing in instead.');
       } else {
-        // Handle other errors
         return Right('Error: ${e.message}');
       }
     }
@@ -39,7 +42,9 @@ class AuthService {
           .signInWithEmailAndPassword(email: email, password: password);
       if (credentials.user != null) {
         return AppUser(
-            email: credentials.user!.email!, uid: credentials.user!.uid);
+            email: credentials.user!.email!,
+            uid: credentials.user!.uid,
+            username: "placeholder value for now");
       }
       return null; // if there's an error
     } catch (e) {

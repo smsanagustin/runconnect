@@ -135,7 +135,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             _formGlobalKey.currentState!.save();
 
                             final result = await AuthService.signUpUser(
-                                _emailAddress, _password);
+                                _emailAddress, _password, _username);
 
                             // handle return values depending on whether it returned AppUser (user) or a String (error)
                             result.fold((user) {
@@ -145,6 +145,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                       "Invalid sign up details. Please check your email and password then try again.";
                                 });
                               } else {
+                                // user successfully signed up
                                 _formGlobalKey.currentState!.reset();
 
                                 if (context.mounted) {

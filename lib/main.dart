@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/firebase_options.dart';
 import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/providers/auth_provider.dart';
+import 'package:runconnect/screens/home/home.dart';
 import 'package:runconnect/screens/profile/profile.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/welcome/welcome_screen.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
               if (value == null) {
                 return const WelcomeScreen();
               }
-              return ProfileScreen(user: value);
+              return HomeScreen(user: value);
             },
             error: (error, _) =>
                 const Text("Error loading authentication status..."),
