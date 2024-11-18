@@ -1,6 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/firebase_options.dart';
+import 'package:runconnect/models/app_user.dart';
+import 'package:runconnect/providers/auth_provider.dart';
+import 'package:runconnect/screens/profile/profile.dart';
+import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/welcome/welcome_screen.dart';
 
 void main() async {
@@ -9,7 +14,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,7 +29,20 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const WelcomeScreen(),
+      home: Consumer(builder: (context, ref, child) {
+        final AsyncValue<AppUser?> user = ref.watch(authProvider);
+
+        return user.when(
+            data: (value) {
+              if (value == null) {
+                return const WelcomeScreen();
+              }
+              return ProfileScreen(user: value);
+            },
+            error: (error, _) =>
+                const Text("Error loading authentication status..."),
+            loading: () => const StyledText("Loading..."));
+      }),
     );
   }
 }
