@@ -15,10 +15,12 @@ class HomeScreen extends ConsumerWidget {
     final appUser = ref.watch(profileNotifierProvider);
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Home")),
+        appBar: AppBar(
+            title: appUser.isNotEmpty
+                ? StyledTitle("Hi, ${appUser.first.username}!")
+                : const Text("")),
         body: Column(
           children: [
-            if (appUser.isNotEmpty) StyledText("Hi, ${appUser.first.username}"),
             StyledButton(
                 text: "Log out",
                 color: "blue",
@@ -29,4 +31,3 @@ class HomeScreen extends ConsumerWidget {
         ));
   }
 }
-
