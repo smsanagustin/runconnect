@@ -48,6 +48,19 @@ class _SignUpFormState extends State<SignUpForm> {
                       height: 10,
                     ),
                     TextFormField(
+                        decoration: InputDecoration(
+                      label: const Text("Username"),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: AppColors.textColor, width: 2.0)),
+                    )),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
                         obscureText: true,
                         decoration: InputDecoration(
                           label: const Text("Password"),
