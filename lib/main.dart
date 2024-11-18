@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
               if (value == null) {
                 return const WelcomeScreen();
               }
-              ref.read(profileNotifierProvider.notifier).addUser(value.uid);
+              ref.read(profileNotifierProvider.notifier).setUser(value.uid);
               // fetch user profile before returning home screen
               return const HomeScreen();
             },

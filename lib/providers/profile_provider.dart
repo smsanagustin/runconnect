@@ -14,7 +14,7 @@ class ProfileNotifier extends _$ProfileNotifier {
   }
 
   // add logged in user to the set
-  void addUser(String id) async {
+  void setUser(String id) async {
     AppUser? appUser = await FirestoreService.getUser(id);
     if (appUser != null) {
       state = {appUser};
