@@ -19,8 +19,7 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         // Handle the case when the email is already in use
-        return const Right(
-            'The email address is already in use by another account.');
+        return const Right('Email already exists. Try signing in instead.');
       } else {
         // Handle other errors
         return Right('Error: ${e.message}');

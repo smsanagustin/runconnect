@@ -118,6 +118,10 @@ class _SignInFormState extends State<SignInForm> {
                               });
                             } else {
                               _formGlobalKey.currentState!.reset();
+                              if (context.mounted) {
+                                // go back to main after logging in
+                                Navigator.pop(context);
+                              }
                             }
 
                             setState(() {
