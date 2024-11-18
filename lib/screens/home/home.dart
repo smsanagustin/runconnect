@@ -1,21 +1,32 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/models/app_user.dart';
+import 'package:runconnect/providers/profile_provider.dart';
+import 'package:runconnect/services/auth_service.dart';
+import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/shared/styled_text.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.user});
-
-  final AppUser user;
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appUser = ref.watch(profileNotifierProvider);
 
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("")),
-        body: StyledText("Hello, ${widget.user.username}"));
+        appBar: AppBar(title: const Text("Home")),
+        body: Column(
+          children: [
+            if (appUser.isNotEmpty) StyledText("Hi, ${appUser.first.username}"),
+            StyledButton(
+                text: "Log out",
+                color: "blue",
+                onPressed: () {
+                  AuthService.signOut();
+                })
+          ],
+        ));
   }
 }
+

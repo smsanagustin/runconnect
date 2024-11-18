@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:runconnect/models/app_user.dart';
+import 'package:runconnect/services/firestore_service.dart';
 
 class AuthService {
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -14,10 +15,16 @@ class AuthService {
 
       // create a new AppUser instance if account is created successfully
       if (userCredential.user != null) {
-        return Left(AppUser(
+        AppUser appUser = AppUser(
             email: userCredential.user!.email!,
             uid: userCredential.user!.uid,
-            username: username));
+            username: username);
+        // add to firestore
+        FirestoreService.addUser(appUser);
+
+        // update global state
+
+        return Left(appUser);
       }
 
       return const Right('Unknown error occured.');

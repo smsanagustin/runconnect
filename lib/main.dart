@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/firebase_options.dart';
 import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/providers/auth_provider.dart';
+import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/home/home.dart';
-import 'package:runconnect/screens/profile/profile.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/welcome/welcome_screen.dart';
 
@@ -38,11 +38,13 @@ class MyApp extends StatelessWidget {
               if (value == null) {
                 return const WelcomeScreen();
               }
-              return HomeScreen(user: value);
+              ref.read(profileNotifierProvider.notifier).addUser(value.uid);
+              // fetch user profile before returning home screen
+              return const HomeScreen();
             },
             error: (error, _) =>
                 const Text("Error loading authentication status..."),
-            loading: () => const StyledText("Loading..."));
+            loading: () => const CircularProgressIndicator());
       }),
     );
   }

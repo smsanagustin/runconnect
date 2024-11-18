@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'run-connect-0501.firebasestorage.app',
     iosBundleId: 'com.example.runconnect',
   );
+
 }

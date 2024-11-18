@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/services/auth_service.dart';
 import 'package:runconnect/shared/sign_in_header.dart';
 import 'package:runconnect/shared/styled_text.dart';
@@ -6,16 +7,18 @@ import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/theme.dart';
 import 'package:runconnect/welcome/sign_in.dart';
 
-class SignUpForm extends StatefulWidget {
+class SignUpForm extends ConsumerStatefulWidget {
   const SignUpForm({super.key});
 
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  ConsumerState<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _SignUpFormState extends ConsumerState<SignUpForm> {
   final _formGlobalKey = GlobalKey<FormState>();
   bool _isLoading = false;
+
+  // stores form field values
   String _errorMessage = "";
   String _emailAddress = "";
   String _username = "";
