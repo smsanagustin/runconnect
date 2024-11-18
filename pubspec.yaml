@@ -39,6 +39,7 @@ dependencies:
   change_app_package_name: ^1.4.0
   firebase_auth: ^5.3.3
   flutter_riverpod: ^2.6.1
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:

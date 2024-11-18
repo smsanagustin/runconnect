@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:runconnect/models/app_user.dart';
 
@@ -5,17 +6,25 @@ class AuthService {
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   // sing up a new user
-  static Future<AppUser?> signUpUser(String email, String password) async {
+  static Future<Either<AppUser?, String>> signUpUser(
+      String email, String password) async {
     try {
       final UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
-        return AppUser(
-            email: userCredential.user!.email!, uid: userCredential.user!.uid);
+        return Left(AppUser(
+            email: userCredential.user!.email!, uid: userCredential.user!.uid));
       }
-      return null;
-    } catch (e) {
-      return null;
+      return const Right('Unknown error occured.');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        // Handle the case when the email is already in use
+        return const Right(
+            'The email address is already in use by another account.');
+      } else {
+        // Handle other errors
+        return Right('Error: ${e.message}');
+      }
     }
   }
 

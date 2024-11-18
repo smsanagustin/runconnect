@@ -131,17 +131,27 @@ class _SignUpFormState extends State<SignUpForm> {
                               _isLoading = true;
                               _errorMessage = "";
                             });
+
                             _formGlobalKey.currentState!.save();
-                            final user = await AuthService.signUpUser(
+
+                            final result = await AuthService.signUpUser(
                                 _emailAddress, _password);
-                            if (user == null) {
+
+                            // handle return values depending on whether it returned AppUser (user) or a String (error)
+                            result.fold((user) {
+                              if (user == null) {
+                                setState(() {
+                                  _errorMessage =
+                                      "Invalid sign up details. Please check your email and password then try again.";
+                                });
+                              } else {
+                                _formGlobalKey.currentState!.reset();
+                              }
+                            }, (error) {
                               setState(() {
-                                _errorMessage =
-                                    "Invalid sign up details. Please check your email and password then try again.";
+                                _errorMessage = error;
                               });
-                            } else {
-                              _formGlobalKey.currentState!.reset();
-                            }
+                            });
 
                             setState(() {
                               _isLoading = false;
