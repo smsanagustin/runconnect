@@ -15,6 +15,7 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formGlobalKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   String _errorMessage = "";
   String _emailAddress = "";
   String _username = "";
@@ -120,29 +121,40 @@ class _SignUpFormState extends State<SignUpForm> {
                           ),
                         ],
                       ),
-                    StyledButton(
-                      text: "Let's go!",
-                      color: "blue",
-                      onPressed: () async {
-                        if (_formGlobalKey.currentState!.validate()) {
-                          setState(() {
-                            _errorMessage = "";
-                          });
-                          _formGlobalKey.currentState!.save();
-
-                          final user = await AuthService.signUpUser(
-                              _emailAddress, _password);
-                          if (user == null) {
+                    if (!_isLoading)
+                      StyledButton(
+                        text: "Let's go!",
+                        color: "blue",
+                        onPressed: () async {
+                          if (_formGlobalKey.currentState!.validate()) {
                             setState(() {
-                              _errorMessage =
-                                  "Invalid sign up details. Please check your email and password then try again.";
+                              _isLoading = true;
+                              _errorMessage = "";
                             });
-                          } else {
-                            _formGlobalKey.currentState!.reset();
+                            _formGlobalKey.currentState!.save();
+                            final user = await AuthService.signUpUser(
+                                _emailAddress, _password);
+                            if (user == null) {
+                              setState(() {
+                                _errorMessage =
+                                    "Invalid sign up details. Please check your email and password then try again.";
+                              });
+                            } else {
+                              _formGlobalKey.currentState!.reset();
+                            }
+
+                            setState(() {
+                              _isLoading = false;
+                            });
                           }
-                        }
-                      },
-                    ),
+                        },
+                      ),
+                    if (_isLoading)
+                      StyledButton(
+                        text: "Loading...",
+                        color: "blue",
+                        onPressed: () {},
+                      ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

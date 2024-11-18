@@ -15,6 +15,7 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final _formGlobalKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   String _errorMessage = "";
   String _emailAddress = "";
   String _password = "";
@@ -93,32 +94,44 @@ class _SignInFormState extends State<SignInForm> {
                           ),
                         ],
                       ),
-                    StyledButton(
-                      text: "Let's go!",
-                      color: "blue",
-                      onPressed: () async {
-                        if (_formGlobalKey.currentState!.validate()) {
-                          // clear the error message
-                          setState(() {
-                            _errorMessage = "";
-                          });
-
-                          _formGlobalKey.currentState!.save();
-
-                          // contact firebase to authenticate user
-                          final user = await AuthService.signInUser(
-                              _emailAddress, _password);
-                          if (user == null) {
+                    if (!_isLoading)
+                      StyledButton(
+                        text: "Let's go!",
+                        color: "blue",
+                        onPressed: () async {
+                          if (_formGlobalKey.currentState!.validate()) {
+                            // clear the error message
                             setState(() {
-                              _errorMessage =
-                                  "Cannot sign in. Please check your email and password then try again.";
+                              _errorMessage = "";
+                              _isLoading = true;
                             });
-                          } else {
-                            _formGlobalKey.currentState!.reset();
+
+                            _formGlobalKey.currentState!.save();
+
+                            // contact firebase to authenticate user
+                            final user = await AuthService.signInUser(
+                                _emailAddress, _password);
+                            if (user == null) {
+                              setState(() {
+                                _errorMessage =
+                                    "Cannot sign in. Please check your email and password then try again.";
+                              });
+                            } else {
+                              _formGlobalKey.currentState!.reset();
+                            }
+
+                            setState(() {
+                              _isLoading = false;
+                            });
                           }
-                        }
-                      },
-                    ),
+                        },
+                      ),
+                    if (_isLoading)
+                      StyledButton(
+                        text: "Loading...",
+                        color: "blue",
+                        onPressed: () {},
+                      ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
