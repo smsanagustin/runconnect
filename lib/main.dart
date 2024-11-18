@@ -49,3 +49,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// REFERENCE: https://dev.to/nicks101/state-persistence-techniques-for-the-flutter-bottom-navigation-bar-3ikc

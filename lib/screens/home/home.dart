@@ -15,15 +15,25 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final PageController controller =
+      PageController(); // controller for page view
   int currentPageIndex = 0;
+  final tabPages = [
+    const FeedScreen(),
+    const Text("add"),
+    const Text("host"),
+    const Text("profile"),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: NavigationBar(
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
           backgroundColor: Colors.white,
           onDestinationSelected: (int index) {
+            controller.jumpToPage(
+                index); // switch to the page as specified by the index
             setState(() {
               currentPageIndex = index;
             });
@@ -53,11 +63,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ],
         ),
-        body: <Widget>[
-          const FeedScreen(),
-          const Text("todo"),
-          const Text("todo"),
-          const Text("todo")
-        ][currentPageIndex]);
+
+        // wrap with a page view to keep tabs consistent
+        body: PageView(
+          controller: controller,
+          children: tabPages,
+          onPageChanged: (index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+        ));
   }
 }
