@@ -31,8 +31,8 @@ class StyledErrorText extends StatelessWidget {
   }
 }
 
-class StyledTitle extends StatelessWidget {
-  const StyledTitle(this.text, {super.key});
+class StyledTitleLarge extends StatelessWidget {
+  const StyledTitleLarge(this.text, {super.key});
   final String text;
 
   @override
@@ -41,6 +41,21 @@ class StyledTitle extends StatelessWidget {
         style: TextStyle(
             fontFamily: "Cabin",
             fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textColor));
+  }
+}
+
+class StyledTitleMedium extends StatelessWidget {
+  const StyledTitleMedium(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        style: TextStyle(
+            fontFamily: "Cabin",
+            fontSize: 22,
             fontWeight: FontWeight.bold,
             color: AppColors.textColor));
   }

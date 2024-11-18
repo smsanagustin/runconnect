@@ -33,7 +33,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
           const SignInHeader(),
           const Padding(
             padding: EdgeInsets.only(top: 20),
-            child: StyledTitle("Sign Up"),
+            child: StyledTitleLarge("Sign Up"),
           ),
           Form(
               key: _formGlobalKey,

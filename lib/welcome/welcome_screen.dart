@@ -18,7 +18,7 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(children: [
           Container(
               margin: const EdgeInsets.only(top: 150),
-              child: const StyledTitle("RunConnect")),
+              child: const StyledTitleLarge("RunConnect")),
           const StyledText("Welcome, runner!"),
           const SizedBox(
             height: 50,

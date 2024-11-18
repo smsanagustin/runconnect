@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/shared/styled_text.dart';
+import 'package:runconnect/theme.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
   const FeedScreen({super.key});
@@ -18,11 +19,39 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
 
     final appUser = ref.watch(profileNotifierProvider);
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
           title: appUser.isNotEmpty
-              ? StyledTitle("Hi, ${appUser.first.username}!")
-              : const Text("")),
-    );
+              ? StyledTitleMedium("Hi, ${appUser.first.username}!")
+              : const Text(""),
+        ),
+        body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.directions_run),
+                          StyledTitleMedium("Runs near you"),
+                        ],
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.add_location_alt))
+                    ],
+                  ),
+                )
+              ],
+            )));
   }
 
   // preserve this page's state

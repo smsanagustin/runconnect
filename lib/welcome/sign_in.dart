@@ -29,7 +29,7 @@ class _SignInFormState extends State<SignInForm> {
           const SignInHeader(),
           const Padding(
             padding: EdgeInsets.only(top: 20),
-            child: StyledTitle("Sign In"),
+            child: StyledTitleLarge("Sign In"),
           ),
           Form(
               key: _formGlobalKey,
