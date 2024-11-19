@@ -118,77 +118,86 @@ class _EditProfileState extends ConsumerState<EditProfile> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const ProfileDetails(),
-              TextButton(
-                  onPressed: () {}, child: const StyledText("Change photo")),
-              const SizedBox(
-                height: 30,
-              ),
-              Form(
-                  key: _formGlobalKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: InputDecoration(
-                            label: const StyledText("Full name"),
-                            border: textFieldBorder,
-                            focusedBorder: textFieldFocusedBorder),
-                        onSaved: (value) {
-                          if (value != null) {
-                            _newFullName = value;
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-
-                      // username
-                      TextFormField(
-                        initialValue:
-                            user != null ? user.username : _newUsername,
-                        decoration: InputDecoration(
-                            label: const StyledText("Username"),
-                            border: textFieldBorder,
-                            focusedBorder: textFieldFocusedBorder),
-                        onSaved: (value) {
-                          if (value != null) {
-                            _newUsername = value;
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-
-                      // location input
-                      TextFormField(
-                        controller: locationInput,
-                        decoration: InputDecoration(
-                          suffix: _gettingCurrentPosition
-                              ? const CircularProgressIndicator()
-                              : null,
-                          label:
-                              const StyledText("Tap to get current location"),
-                          border: textFieldBorder,
-                          focusedBorder: textFieldFocusedBorder,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const ProfileDetails(),
+                TextButton(
+                    onPressed: () {}, child: const StyledText("Change photo")),
+                const SizedBox(
+                  height: 30,
+                ),
+                Form(
+                    key: _formGlobalKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          decoration: InputDecoration(
+                              label: const StyledText("Full name"),
+                              border: textFieldBorder,
+                              focusedBorder: textFieldFocusedBorder),
+                          onSaved: (value) {
+                            if (value != null) {
+                              _newFullName = value;
+                            }
+                          },
                         ),
-                        readOnly: true,
-                        onTap: _getCurrentPosition,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "You must enter the location of this event.";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ],
-                  ))
-            ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+
+                        // username
+                        TextFormField(
+                          initialValue:
+                              user != null ? user.username : _newUsername,
+                          decoration: InputDecoration(
+                              label: const StyledText("Username"),
+                              border: textFieldBorder,
+                              focusedBorder: textFieldFocusedBorder),
+                          onSaved: (value) {
+                            if (value != null) {
+                              _newUsername = value;
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+
+                        // location input
+                        TextFormField(
+                          controller: locationInput,
+                          decoration: InputDecoration(
+                            suffix: _gettingCurrentPosition
+                                ? const CircularProgressIndicator()
+                                : null,
+                            label:
+                                const StyledText("Tap to get current location"),
+                            border: textFieldBorder,
+                            focusedBorder: textFieldFocusedBorder,
+                          ),
+                          readOnly: true,
+                          onTap: _getCurrentPosition,
+                          onSaved: (value) {
+                            if (value != null) {
+                              _newLocation = value;
+                            }
+                          },
+                        ),
+
+                        ElevatedButton(
+                            onPressed: () {
+                              _formGlobalKey.currentState!.save();
+                              print(_newFullName);
+                              print(_newUsername);
+                              print(_newLocation);
+                            },
+                            child: const StyledText("Save"))
+                      ],
+                    ))
+              ],
+            ),
           ),
         ));
   }
