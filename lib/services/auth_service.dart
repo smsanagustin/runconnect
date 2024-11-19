@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:runconnect/models/app_user.dart';
-import 'package:runconnect/services/firestore_service.dart';
+import 'package:runconnect/services/user_firestore.dart';
 
 class AuthService {
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -20,7 +20,7 @@ class AuthService {
             uid: userCredential.user!.uid,
             username: username);
         // add to firestore
-        FirestoreService.addUser(appUser);
+        UserFirestoreService.addUser(appUser);
 
         // update global state
 

@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:runconnect/models/app_user.dart';
 
-class FirestoreService {
+class UserFirestoreService {
   // add a reference to the users collection
   static final userRef = FirebaseFirestore.instance
       .collection("appUsers")
@@ -10,6 +10,7 @@ class FirestoreService {
           fromFirestore: AppUser.fromFirestore,
           toFirestore: (AppUser a, _) => a.toFirestore());
 
+  // USER METHODS
   // add user to firestore
   static Future<void> addUser(AppUser appUser) async {
     await userRef.doc(appUser.uid).set(appUser);
@@ -29,4 +30,7 @@ class FirestoreService {
       'location': appUser.location
     });
   }
+
+  // RUN EVENT METHODS
+  // add an event to firestore
 }

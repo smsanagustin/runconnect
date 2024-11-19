@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:runconnect/models/app_user.dart';
-import 'package:runconnect/services/firestore_service.dart';
+import 'package:runconnect/services/user_firestore.dart';
 
 part 'profile_provider.g.dart';
 
@@ -15,7 +15,7 @@ class ProfileNotifier extends _$ProfileNotifier {
 
   // add logged in user to the set
   void setUser(String id) async {
-    AppUser? appUser = await FirestoreService.getUser(id);
+    AppUser? appUser = await UserFirestoreService.getUser(id);
     if (appUser != null) {
       state = {appUser};
     }
@@ -26,7 +26,7 @@ class ProfileNotifier extends _$ProfileNotifier {
     state = {appUser};
 
     // also save the update to firestore
-    FirestoreService.updateUser(appUser);
+    UserFirestoreService.updateUser(appUser);
   }
 
   // remove
