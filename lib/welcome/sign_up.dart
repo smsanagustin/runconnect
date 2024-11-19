@@ -43,6 +43,8 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                 child: Column(
                   children: [
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         label: const Text("Email address"),
@@ -68,6 +70,8 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                       height: 10,
                     ),
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       decoration: InputDecoration(
                         label: const Text("Username"),
                         border: OutlineInputBorder(
@@ -92,6 +96,8 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                       height: 10,
                     ),
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       obscureText: true,
                       decoration: InputDecoration(
                         label: const Text("Password"),

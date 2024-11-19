@@ -143,6 +143,8 @@ class _HostScreenState extends State<HostScreen> {
                     ),
                     // title
                     TextFormField(
+                        style: TextStyle(
+                            fontFamily: "Cabin", color: AppColors.textColor),
                         decoration: InputDecoration(
                           icon: const Icon(Icons.title),
                           label: const StyledText("Run title"),
@@ -159,6 +161,8 @@ class _HostScreenState extends State<HostScreen> {
                       height: 10,
                     ),
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       controller: dateInput,
                       decoration: InputDecoration(
                         icon: const Icon(Icons.calendar_today),
@@ -195,6 +199,8 @@ class _HostScreenState extends State<HostScreen> {
                       height: 10,
                     ),
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       controller: timeInput,
                       decoration: InputDecoration(
                         icon: const Icon(Icons.schedule),
@@ -231,6 +237,8 @@ class _HostScreenState extends State<HostScreen> {
 
                     // location
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       controller: locationInput,
                       decoration: InputDecoration(
                         icon: _gettingCurrentPosition
@@ -255,6 +263,8 @@ class _HostScreenState extends State<HostScreen> {
                       height: 10,
                     ),
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       decoration: InputDecoration(
                         icon: const Icon(Icons.location_on),
                         label: const StyledText("Meetup place"),
@@ -276,6 +286,8 @@ class _HostScreenState extends State<HostScreen> {
                       height: 10,
                     ),
                     TextFormField(
+                        style: TextStyle(
+                            fontFamily: "Cabin", color: AppColors.textColor),
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           icon: const Icon(Icons.directions_run),
@@ -326,6 +338,8 @@ class _HostScreenState extends State<HostScreen> {
                       height: 10,
                     ),
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
                       ],

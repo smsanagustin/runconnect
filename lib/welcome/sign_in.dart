@@ -39,6 +39,8 @@ class _SignInFormState extends State<SignInForm> {
                 child: Column(
                   children: [
                     TextFormField(
+                        style: TextStyle(
+                            fontFamily: "Cabin", color: AppColors.textColor),
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           label: const Text("Email address"),
@@ -64,6 +66,8 @@ class _SignInFormState extends State<SignInForm> {
                       height: 10,
                     ),
                     TextFormField(
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
                       obscureText: true,
                       decoration: InputDecoration(
                         label: const Text("Password"),
