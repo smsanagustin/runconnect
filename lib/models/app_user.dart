@@ -99,8 +99,19 @@ class AppUser {
       uid: data['uid'],
       username: data['username'],
       fullName: data['fullName'],
+      location: data['location'],
       profilePhoto: data['profilePhoto'],
     );
+
+    // get list of user's followers
+    for (String followerId in data['idsOfFollowers']) {
+      appUser.addFollowerId(followerId);
+    }
+
+    // get list of users's following list
+    for (String followingId in data['idsOfFollowing']) {
+      appUser.addFollowingId(followingId);
+    }
 
     // get list of created events
     for (String eventId in data['createdEventIds']) {
