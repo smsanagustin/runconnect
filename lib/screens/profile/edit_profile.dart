@@ -137,6 +137,12 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                               label: const StyledText("Full name"),
                               border: textFieldBorder,
                               focusedBorder: textFieldFocusedBorder),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please input your name.";
+                            }
+                            return null;
+                          },
                           onSaved: (value) {
                             if (value != null) {
                               _newFullName = value;
@@ -188,24 +194,20 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
                         ElevatedButton(
                             onPressed: () {
-                              _formGlobalKey.currentState!.save();
+                              if (_formGlobalKey.currentState!.validate()) {
+                                _formGlobalKey.currentState!.save();
 
-                              print(_newFullName);
-                              print(_newUsername);
-                              print(_newLocation);
+                                // update global state
+                                if (user != null) {
+                                  user.fullName = _newFullName;
+                                  user.username = _newUsername;
+                                  user.location = _newLocation;
 
-                              // update global state
-                              if (user != null) {
-                                user.fullName = _newFullName;
-                                user.username = _newUsername;
-                                user.location = _newLocation;
-
-                                ref
-                                    .read(profileNotifierProvider.notifier)
-                                    .updateUser(user);
+                                  ref
+                                      .read(profileNotifierProvider.notifier)
+                                      .updateUser(user);
+                                }
                               }
-
-                              // update document in firestore
                             },
                             child: const StyledText("Save"))
                       ],

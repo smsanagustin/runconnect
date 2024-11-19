@@ -60,7 +60,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ],
                       ),
                     )
-                  : StyledText(appUser.first.fullName),
+                  : const Column(),
             ],
           ),
         ));
