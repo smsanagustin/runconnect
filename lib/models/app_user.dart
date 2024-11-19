@@ -7,25 +7,34 @@ class AppUser {
     this.username = "",
     this.fullName = "",
     this.profilePhoto = "",
+    this.location = "",
+    List<String>? idsOfFollowing,
+    List<String>? idsOfFollowers,
     List<String>? createdEventIds,
     List<String>? joinedEventIds,
     List<String>? bookmarkedEventIds,
-  })  : _createdEventIds = createdEventIds ?? [],
+  })  : _idsOfFollowing = idsOfFollowing ?? [],
+        _idsOfFollowers = idsOfFollowers ?? [],
+        _createdEventIds = createdEventIds ?? [],
         _joinedEventIds = joinedEventIds ?? [],
         _bookmarkedEventIds = bookmarkedEventIds ?? [];
 
+  // fields
   final String email;
   final String uid;
   String username;
   String fullName;
+  String location;
   String profilePhoto; // URL
-
-  // run events created, joined and saved by the user
+  List<String> _idsOfFollowing;
+  List<String> _idsOfFollowers;
   List<String> _createdEventIds;
   List<String> _joinedEventIds;
   List<String> _bookmarkedEventIds;
 
   // getters
+  List<String> get idsOfFollowing => List.unmodifiable(_idsOfFollowing);
+  List<String> get idsOfFollowers => List.unmodifiable(_idsOfFollowers);
   List<String> get createdEventIds => List.unmodifiable(_createdEventIds);
   List<String> get joinedEventIds => List.unmodifiable(_joinedEventIds);
   List<String> get bookmarkedEventIds => List.unmodifiable(_bookmarkedEventIds);
@@ -41,6 +50,14 @@ class AppUser {
 
   void addBookmarkedEventId(String eventId) {
     _bookmarkedEventIds.add(eventId);
+  }
+
+  void addFollowerId(String eventId) {
+    _idsOfFollowers.add(eventId);
+  }
+
+  void addFollowingId(String eventId) {
+    _idsOfFollowing.add(eventId);
   }
 
   void removeCreatedEventId(String eventId) {
@@ -62,7 +79,10 @@ class AppUser {
       'uid': uid,
       'username': username,
       'fullName': fullName,
+      'location': location,
       'profilePhoto': profilePhoto,
+      'idsOfFollowing': idsOfFollowing,
+      'idsOfFollowers': idsOfFollowers,
       'createdEventIds': createdEventIds,
       'joinedEventIds': joinedEventIds,
       'bookmarkedEventIds': bookmarkedEventIds,

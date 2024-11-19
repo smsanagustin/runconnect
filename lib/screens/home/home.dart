@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/screens/home/feed.dart';
 import 'package:runconnect/screens/home/host.dart';
+import 'package:runconnect/screens/home/profile.dart';
 import 'package:runconnect/screens/home/search.dart';
 import 'package:runconnect/theme.dart';
 
@@ -20,7 +21,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     const FeedScreen(),
     const SearchScreen(),
     const HostScreen(),
-    const Text("profile"),
+    const ProfileScreen()
   ];
 
   @override

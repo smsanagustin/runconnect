@@ -22,7 +22,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
         appBar: AppBar(
           title: appUser.isNotEmpty
               ? StyledTitleMedium("Hi, ${appUser.first.username}!")
-              : const Text(""),
+              : const CircularProgressIndicator(),
         ),
         body: Padding(
             padding: const EdgeInsets.all(16),
