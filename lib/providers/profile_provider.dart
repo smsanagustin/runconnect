@@ -21,6 +21,14 @@ class ProfileNotifier extends _$ProfileNotifier {
     }
   }
 
+  // update current user
+  void updateUser(AppUser appUser) {
+    state = {appUser};
+
+    // also save the update to firestore
+    FirestoreService.updateUser(appUser);
+  }
+
   // remove
   void removeUser() {
     state = {};

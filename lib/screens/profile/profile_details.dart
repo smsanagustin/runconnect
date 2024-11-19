@@ -55,7 +55,7 @@ class ProfileDetails extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               StyledTextStrong(fullName == "" ? "Name not set." : fullName),
-              StyledText(location == "" ? "Location not set." : fullName),
+              StyledText(location == "" ? "Location not set." : location),
               const SizedBox(
                 height: 2,
               ),

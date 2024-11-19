@@ -189,9 +189,23 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                         ElevatedButton(
                             onPressed: () {
                               _formGlobalKey.currentState!.save();
+
                               print(_newFullName);
                               print(_newUsername);
                               print(_newLocation);
+
+                              // update global state
+                              if (user != null) {
+                                user.fullName = _newFullName;
+                                user.username = _newUsername;
+                                user.location = _newLocation;
+
+                                ref
+                                    .read(profileNotifierProvider.notifier)
+                                    .updateUser(user);
+                              }
+
+                              // update document in firestore
                             },
                             child: const StyledText("Save"))
                       ],

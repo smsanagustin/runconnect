@@ -20,4 +20,13 @@ class FirestoreService {
     final doc = await ref.doc(uid).get();
     return doc.data();
   }
+
+  // update user's profile in firestore
+  static Future<void> updateUser(AppUser appUser) async {
+    await ref.doc(appUser.uid).update({
+      'fullName': appUser.fullName,
+      'username': appUser.username,
+      'location': appUser.location
+    });
+  }
 }
