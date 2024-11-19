@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/profile/edit_profile.dart';
+import 'package:runconnect/screens/profile/profile_details.dart';
 import 'package:runconnect/services/auth_service.dart';
 import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/shared/styled_text.dart';
@@ -60,7 +61,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ],
                       ),
                     )
-                  : const Column(),
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const ProfileDetails(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        StyledButton(
+                            text: "Edit profile",
+                            color: "blue",
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (ctx) => const EditProfile()));
+                            }),
+                      ],
+                    ),
             ],
           ),
         ));

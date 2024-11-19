@@ -133,6 +133,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                     child: Column(
                       children: [
                         TextFormField(
+                          initialValue:
+                              user != null ? user.fullName : _newFullName,
                           decoration: InputDecoration(
                               label: const StyledText("Full name"),
                               border: textFieldBorder,
@@ -186,8 +188,13 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                           readOnly: true,
                           onTap: _getCurrentPosition,
                           onSaved: (value) {
-                            if (value != null) {
+                            if (value != null && value.isNotEmpty) {
                               _newLocation = value;
+                            } else {
+                              // if user did not input any location, keep the old value of user.location
+                              if (user != null) {
+                                _newLocation = user.location;
+                              }
                             }
                           },
                         ),
