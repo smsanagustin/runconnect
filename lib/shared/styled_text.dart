@@ -9,6 +9,7 @@ class StyledText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontFamily: "Cabin", color: AppColors.textColor, fontSize: 15),
       textAlign: TextAlign.center,

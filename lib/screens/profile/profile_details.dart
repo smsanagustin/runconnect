@@ -47,6 +47,10 @@ class ProfileDetails extends ConsumerWidget {
                 ),
               );
             },
+            errorBuilder: (BuildContext context, Object exception,
+                StackTrace? stackTrace) {
+              return const Icon(Icons.image);
+            },
           ),
           const SizedBox(
             width: 20,
@@ -64,7 +68,7 @@ class ProfileDetails extends ConsumerWidget {
                   StyledText("$numberOfFollowing  Following"),
                   StyledText("  $numberOfFollowers  Followers")
                 ],
-              )
+              ),
             ],
           )
         ],

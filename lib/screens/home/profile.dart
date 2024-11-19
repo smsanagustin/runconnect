@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:runconnect/components/user_runs.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/profile/edit_profile.dart';
 import 'package:runconnect/screens/profile/profile_details.dart';
@@ -61,7 +62,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ],
                       ),
                     )
-                  : Column(
+                  : Expanded(
+                      child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const ProfileDetails(),
@@ -77,8 +79,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   MaterialPageRoute(
                                       builder: (ctx) => const EditProfile()));
                             }),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const UserRuns(),
                       ],
-                    ),
+                    )),
             ],
           ),
         ));
