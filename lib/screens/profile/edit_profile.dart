@@ -139,6 +139,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   child: Column(
                     children: [
                       TextFormField(
+                        style: TextStyle(
+                            fontFamily: "Cabin", color: AppColors.textColor),
                         initialValue:
                             user != null ? user.fullName : _newFullName,
                         decoration: InputDecoration(
@@ -163,6 +165,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
                       // username
                       TextFormField(
+                        style: TextStyle(
+                            fontFamily: "Cabin", color: AppColors.textColor),
                         initialValue:
                             user != null ? user.username : _newUsername,
                         decoration: InputDecoration(
@@ -181,6 +185,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
                       // location input
                       TextFormField(
+                        style: TextStyle(
+                            fontFamily: "Cabin", color: AppColors.textColor),
                         controller: locationInput,
                         decoration: InputDecoration(
                           suffix: _gettingCurrentPosition
