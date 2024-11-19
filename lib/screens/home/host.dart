@@ -306,7 +306,7 @@ class _HostScreenState extends State<HostScreen> {
                       items: RunTypes.values.map((runType) {
                         return DropdownMenuItem(
                           value: runType.title,
-                          child: Text(runType.title),
+                          child: StyledText(runType.title),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -366,7 +366,7 @@ class _HostScreenState extends State<HostScreen> {
                       items: EventVisibility.values.map((eventVisibility) {
                         return DropdownMenuItem(
                           value: eventVisibility.visibility,
-                          child: Text(eventVisibility.visibility),
+                          child: StyledText(eventVisibility.visibility),
                         );
                       }).toList(),
                       onChanged: (value) {
