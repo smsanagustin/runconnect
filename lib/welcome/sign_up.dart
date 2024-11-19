@@ -47,7 +47,8 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                       decoration: InputDecoration(
                         label: const Text("Email address"),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.textColor)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
@@ -70,7 +71,8 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                       decoration: InputDecoration(
                         label: const Text("Username"),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.textColor)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
@@ -94,7 +96,8 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                       decoration: InputDecoration(
                         label: const Text("Password"),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.textColor)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(

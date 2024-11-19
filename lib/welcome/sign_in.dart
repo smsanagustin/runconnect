@@ -43,7 +43,9 @@ class _SignInFormState extends State<SignInForm> {
                         decoration: InputDecoration(
                           label: const Text("Email address"),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: AppColors.textColor)),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
@@ -66,7 +68,8 @@ class _SignInFormState extends State<SignInForm> {
                       decoration: InputDecoration(
                         label: const Text("Password"),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: AppColors.textColor)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
