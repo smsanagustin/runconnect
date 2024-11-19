@@ -38,10 +38,13 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.directions_run),
-                          StyledTitleMedium("Runs near you"),
+                          const Icon(Icons.directions_run),
+                          appUser.isNotEmpty
+                              ? StyledTitleMedium(
+                                  "Runs near ${appUser.first.location.split(',').first}") // show only the locality
+                              : const StyledTitleMedium("Runs near you"),
                         ],
                       ),
                       IconButton(

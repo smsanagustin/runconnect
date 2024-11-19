@@ -71,6 +71,7 @@ class StyledTitleMedium extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
             fontFamily: "Cabin",
             fontSize: 22,
