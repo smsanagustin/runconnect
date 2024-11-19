@@ -6,6 +6,7 @@ import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/profile/profile_details.dart';
 import 'package:runconnect/shared/shared_styles.dart';
+import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
 
@@ -32,6 +33,11 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    // for showing a snackbar after user saves profile successfully
+    const snackBar = SnackBar(
+      content: Text('Profile saved successfully!'),
+    );
+
     final appUser = ref.watch(profileNotifierProvider);
     AppUser? user;
 
@@ -129,96 +135,106 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   height: 30,
                 ),
                 Form(
-                    key: _formGlobalKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          initialValue:
-                              user != null ? user.fullName : _newFullName,
-                          decoration: InputDecoration(
-                              label: const StyledText("Full name"),
-                              border: textFieldBorder,
-                              focusedBorder: textFieldFocusedBorder),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please input your name.";
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            if (value != null) {
-                              _newFullName = value;
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-
-                        // username
-                        TextFormField(
-                          initialValue:
-                              user != null ? user.username : _newUsername,
-                          decoration: InputDecoration(
-                              label: const StyledText("Username"),
-                              border: textFieldBorder,
-                              focusedBorder: textFieldFocusedBorder),
-                          onSaved: (value) {
-                            if (value != null) {
-                              _newUsername = value;
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-
-                        // location input
-                        TextFormField(
-                          controller: locationInput,
-                          decoration: InputDecoration(
-                            suffix: _gettingCurrentPosition
-                                ? const CircularProgressIndicator()
-                                : null,
-                            label:
-                                const StyledText("Tap to get current location"),
+                  key: _formGlobalKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        initialValue:
+                            user != null ? user.fullName : _newFullName,
+                        decoration: InputDecoration(
+                            label: const StyledText("Full name"),
                             border: textFieldBorder,
-                            focusedBorder: textFieldFocusedBorder,
-                          ),
-                          readOnly: true,
-                          onTap: _getCurrentPosition,
-                          onSaved: (value) {
-                            if (value != null && value.isNotEmpty) {
-                              _newLocation = value;
-                            } else {
-                              // if user did not input any location, keep the old value of user.location
-                              if (user != null) {
-                                _newLocation = user.location;
-                              }
-                            }
-                          },
+                            focusedBorder: textFieldFocusedBorder),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please input your name.";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          if (value != null) {
+                            _newFullName = value;
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      // username
+                      TextFormField(
+                        initialValue:
+                            user != null ? user.username : _newUsername,
+                        decoration: InputDecoration(
+                            label: const StyledText("Username"),
+                            border: textFieldBorder,
+                            focusedBorder: textFieldFocusedBorder),
+                        onSaved: (value) {
+                          if (value != null) {
+                            _newUsername = value;
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      // location input
+                      TextFormField(
+                        controller: locationInput,
+                        decoration: InputDecoration(
+                          suffix: _gettingCurrentPosition
+                              ? const CircularProgressIndicator()
+                              : null,
+                          label:
+                              const StyledText("Tap to get current location"),
+                          border: textFieldBorder,
+                          focusedBorder: textFieldFocusedBorder,
                         ),
+                        readOnly: true,
+                        onTap: _getCurrentPosition,
+                        onSaved: (value) {
+                          if (value != null && value.isNotEmpty) {
+                            _newLocation = value;
+                          } else {
+                            // if user did not input any location, keep the old value of user.location
+                            if (user != null) {
+                              _newLocation = user.location;
+                            }
+                          }
+                        },
+                      ),
 
-                        ElevatedButton(
-                            onPressed: () {
-                              if (_formGlobalKey.currentState!.validate()) {
-                                _formGlobalKey.currentState!.save();
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      StyledButton(
+                        text: "Save",
+                        color: "blue",
+                        onPressed: () {
+                          if (_formGlobalKey.currentState!.validate()) {
+                            _formGlobalKey.currentState!.save();
 
-                                // update global state
-                                if (user != null) {
-                                  user.fullName = _newFullName;
-                                  user.username = _newUsername;
-                                  user.location = _newLocation;
+                            // update global state
+                            if (user != null) {
+                              user.fullName = _newFullName;
+                              user.username = _newUsername;
+                              user.location = _newLocation;
 
-                                  ref
-                                      .read(profileNotifierProvider.notifier)
-                                      .updateUser(user);
-                                }
-                              }
-                            },
-                            child: const StyledText("Save"))
-                      ],
-                    ))
+                              ref
+                                  .read(profileNotifierProvider.notifier)
+                                  .updateUser(user);
+
+                              // show snackbar
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           ),
