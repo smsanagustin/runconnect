@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/home/feed.dart';
-import 'package:runconnect/services/auth_service.dart';
-import 'package:runconnect/shared/styled_button.dart';
-import 'package:runconnect/shared/styled_text.dart';
+import 'package:runconnect/screens/home/search.dart';
 import 'package:runconnect/theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -20,7 +17,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   int currentPageIndex = 0;
   final tabPages = [
     const FeedScreen(),
-    const Text("add"),
+    const SearchScreen(),
     const Text("host"),
     const Text("profile"),
   ];
@@ -67,6 +64,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         // wrap with a page view to keep tabs consistent
         body: PageView(
           controller: controller,
+          physics:
+              const NeverScrollableScrollPhysics(), // disable scrolling to navigate between pages
           children: tabPages,
           onPageChanged: (index) {
             setState(() {
