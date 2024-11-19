@@ -63,7 +63,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                           .contains(
                                               searchQuery.toLowerCase())) {
                                         return ListTile(
-                                            title: StyledText(data['fullName']),
+                                            title: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: StyledText(
+                                                    data['fullName'])),
                                             leading: const Icon(Icons.person));
                                       }
                                       return Container();
