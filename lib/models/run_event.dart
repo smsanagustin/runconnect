@@ -7,6 +7,7 @@ class RunEvent {
   String? meetupPlace;
   String? time;
   int? distance;
+  int? numberOfParticipants;
   String? date;
   String? runType;
   List<Comment> comments;
@@ -19,6 +20,7 @@ class RunEvent {
     required this.meetupPlace,
     required this.time,
     required this.distance,
+    required this.numberOfParticipants,
     required this.date,
     required this.runType,
     this.comments = const [],

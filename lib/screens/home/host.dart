@@ -1,9 +1,12 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/number_symbols_data.dart';
+import 'package:runconnect/models/event_visibility.dart';
 import 'package:runconnect/models/run_type.dart';
 import 'package:runconnect/shared/shared_styles.dart';
 import 'package:runconnect/shared/styled_text.dart';
@@ -21,6 +24,8 @@ class _HostScreenState extends State<HostScreen> {
   TextEditingController dateInput = TextEditingController();
   TextEditingController timeInput = TextEditingController();
   TextEditingController locationInput = TextEditingController();
+  String _selectedRunType = RunTypes.shortRun.title;
+  String _selectedVisibility = EventVisibility.public.visibility;
 
   // stores current address and position
   String? _currentAddress;
@@ -132,6 +137,10 @@ class _HostScreenState extends State<HostScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const StyledTitleMedium("Details"),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     // title
                     TextFormField(
                         decoration: InputDecoration(
@@ -252,6 +261,12 @@ class _HostScreenState extends State<HostScreen> {
                         border: textFieldBorder,
                         focusedBorder: textFieldFocusedBorder,
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "You must add a meetup place.";
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(
                       height: 20,
@@ -275,8 +290,13 @@ class _HostScreenState extends State<HostScreen> {
                           return null;
                         }),
 
+                    const SizedBox(
+                      height: 10,
+                    ),
+
                     // type of run (dropdown)
                     DropdownButtonFormField(
+                      value: _selectedRunType,
                       decoration: InputDecoration(
                         icon: const Icon(Icons.edit_attributes),
                         label: const StyledText("Select run type"),
@@ -289,7 +309,73 @@ class _HostScreenState extends State<HostScreen> {
                           child: Text(runType.title),
                         );
                       }).toList(),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _selectedRunType = value;
+                          });
+                        }
+                      },
+                    ),
+
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const StyledTitleMedium("Participants"),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.groups),
+                        label: const StyledText("How many can join? (1-100)"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "You must input a value";
+                        }
+                        final numberOfParticipants = int.tryParse(value);
+                        if (numberOfParticipants! < 1 ||
+                            numberOfParticipants > 100) {
+                          return "Only 1-100 particpants for each run is allowed";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    // type of run (dropdown)
+                    DropdownButtonFormField(
+                      value: _selectedVisibility,
+                      decoration: InputDecoration(
+                        icon: _selectedVisibility ==
+                                EventVisibility.public.visibility
+                            ? const Icon(Icons.public)
+                            : const Icon(Icons.lock),
+                        label: const StyledText("Who can see?"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
+                      ),
+                      items: EventVisibility.values.map((eventVisibility) {
+                        return DropdownMenuItem(
+                          value: eventVisibility.visibility,
+                          child: Text(eventVisibility.visibility),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _selectedVisibility = value;
+                          });
+                        }
+                      },
                     ),
                   ],
                 ),
