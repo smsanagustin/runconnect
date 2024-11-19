@@ -2,25 +2,38 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/number_symbols_data.dart';
+import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/models/event_visibility.dart';
+import 'package:runconnect/models/run_event.dart';
 import 'package:runconnect/models/run_type.dart';
+import 'package:runconnect/providers/profile_provider.dart';
+import 'package:runconnect/services/event_firestore.dart';
+import 'package:runconnect/services/user_firestore.dart';
 import 'package:runconnect/shared/shared_styles.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
+import 'package:uuid/uuid.dart';
 
-class HostScreen extends StatefulWidget {
+class HostScreen extends ConsumerStatefulWidget {
   const HostScreen({super.key});
 
   @override
-  State<HostScreen> createState() => _HostScreenState();
+  ConsumerState<HostScreen> createState() => _HostScreenState();
 }
 
-class _HostScreenState extends State<HostScreen> {
-  // stores the date and time picked by the user
+class _HostScreenState extends ConsumerState<HostScreen> {
+  // where form values are saved to create an instance of the object
+  String _eventTitle = "";
+  String _eventMeetupPlace = "";
+  int _distance = 0;
+  int _numberOfParticipants = 0;
+
+  // stores the date and time picked by the user so we can output it on the form
   TextEditingController dateInput = TextEditingController();
   TextEditingController timeInput = TextEditingController();
   TextEditingController locationInput = TextEditingController();
@@ -44,6 +57,20 @@ class _HostScreenState extends State<HostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // snackbar that shows after run is saved
+    const snackBar = SnackBar(
+      content: Text('Run created!'),
+    );
+
+    // get logged in user
+    final appUser = ref.watch(profileNotifierProvider);
+    AppUser? user;
+
+    // set app user
+    if (appUser.isNotEmpty) {
+      user = appUser.first;
+    }
+
     // get user's permission to get their location
     Future<bool> _handleLocationPermission() async {
       bool serviceEnabled;
@@ -122,7 +149,38 @@ class _HostScreenState extends State<HostScreen> {
               const StyledTitleMedium("Host a new run"),
               TextButton(
                   onPressed: () {
-                    _formGlobalKey.currentState!.validate();
+                    if (_formGlobalKey.currentState!.validate()) {
+                      _formGlobalKey.currentState!.save();
+
+                      // create new RunEvent object then save to user profile and to firestore                     RunEvent newEvent = RunEvent(
+                      if (user != null) {
+                        String newEventId = const Uuid().v4();
+                        RunEvent newEvent = RunEvent(
+                            id: newEventId,
+                            creatorId: user.uid,
+                            title: _eventTitle,
+                            location: locationInput.text,
+                            meetupPlace: _eventMeetupPlace,
+                            time: timeInput.text,
+                            date: dateInput.text,
+                            runType: _selectedRunType,
+                            visibility: _selectedVisibility,
+                            distance: _distance,
+                            numberOfParticipants: _numberOfParticipants);
+
+                        // save to user and firestore
+                        user.addCreatedEventId(newEventId);
+                        ref
+                            .read(profileNotifierProvider.notifier)
+                            .updateUser(user);
+
+                        EventFirestoreService.addEvent(newEvent);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        _formGlobalKey.currentState!.reset();
+
+                        // TODO: redirect the user to the screen of this event; pop for now
+                      }
+                    }
                   },
                   child: const StyledText("Save"))
             ],
@@ -143,20 +201,26 @@ class _HostScreenState extends State<HostScreen> {
                     ),
                     // title
                     TextFormField(
-                        style: TextStyle(
-                            fontFamily: "Cabin", color: AppColors.textColor),
-                        decoration: InputDecoration(
-                          icon: const Icon(Icons.title),
-                          label: const StyledText("Run title"),
-                          border: textFieldBorder,
-                          focusedBorder: textFieldFocusedBorder,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Your event must have a name.";
-                          }
-                          return null;
-                        }),
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.title),
+                        label: const StyledText("Run title"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Your event must have a name.";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        if (value != null) {
+                          _eventTitle = value;
+                        }
+                      },
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -170,6 +234,8 @@ class _HostScreenState extends State<HostScreen> {
                         border: textFieldBorder,
                         focusedBorder: textFieldFocusedBorder,
                       ),
+
+                      // stores value to dateInput.text
                       readOnly: true,
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
@@ -198,6 +264,8 @@ class _HostScreenState extends State<HostScreen> {
                     const SizedBox(
                       height: 10,
                     ),
+
+                    // stores value to timeInput.text
                     TextFormField(
                       style: TextStyle(
                           fontFamily: "Cabin", color: AppColors.textColor),
@@ -235,7 +303,7 @@ class _HostScreenState extends State<HostScreen> {
                       height: 10,
                     ),
 
-                    // location
+                    // stores value to locationInput.text
                     TextFormField(
                       style: TextStyle(
                           fontFamily: "Cabin", color: AppColors.textColor),
@@ -262,6 +330,7 @@ class _HostScreenState extends State<HostScreen> {
                     const SizedBox(
                       height: 10,
                     ),
+
                     TextFormField(
                       style: TextStyle(
                           fontFamily: "Cabin", color: AppColors.textColor),
@@ -277,6 +346,11 @@ class _HostScreenState extends State<HostScreen> {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        if (value != null) {
+                          _eventMeetupPlace = value;
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 10,
@@ -286,27 +360,34 @@ class _HostScreenState extends State<HostScreen> {
                       height: 10,
                     ),
                     TextFormField(
-                        style: TextStyle(
-                            fontFamily: "Cabin", color: AppColors.textColor),
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          icon: const Icon(Icons.directions_run),
-                          label: const StyledText("Enter distance (in km)"),
-                          border: textFieldBorder,
-                          focusedBorder: textFieldFocusedBorder,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "You must specify the distance.";
-                          }
-                          return null;
-                        }),
+                      style: TextStyle(
+                          fontFamily: "Cabin", color: AppColors.textColor),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.directions_run),
+                        label: const StyledText("Enter distance (in km)"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "You must specify the distance.";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        if (value != null) {
+                          _distance = int.parse(value);
+                        }
+                      },
+                    ),
 
                     const SizedBox(
                       height: 10,
                     ),
 
                     // type of run (dropdown)
+                    // stored in _selectedRunType
                     DropdownButtonFormField(
                       value: _selectedRunType,
                       decoration: InputDecoration(
@@ -361,11 +442,18 @@ class _HostScreenState extends State<HostScreen> {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        if (value != null) {
+                          _numberOfParticipants = int.parse(value);
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 10,
                     ),
+
                     // type of run (dropdown)
+                    // stored in selectedVisibility
                     DropdownButtonFormField(
                       value: _selectedVisibility,
                       decoration: InputDecoration(

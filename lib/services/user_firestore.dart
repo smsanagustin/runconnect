@@ -27,7 +27,12 @@ class UserFirestoreService {
     await userRef.doc(appUser.uid).update({
       'fullName': appUser.fullName,
       'username': appUser.username,
-      'location': appUser.location
+      'location': appUser.location,
+      'idsOfFollowing': appUser.idsOfFollowing,
+      'idsOfFollowers': appUser.idsOfFollowers,
+      'createdEventIds': appUser.createdEventIds,
+      'joinedEventIds': appUser.joinedEventIds,
+      'bookmarkedEventIds': appUser.bookmarkedEventIds
     });
   }
 
