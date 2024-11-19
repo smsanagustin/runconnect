@@ -156,7 +156,7 @@ class _HostScreenState extends State<HostScreen> {
                           return null;
                         }),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     TextFormField(
                       controller: dateInput,
@@ -192,7 +192,7 @@ class _HostScreenState extends State<HostScreen> {
                       },
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     TextFormField(
                       controller: timeInput,
@@ -226,7 +226,7 @@ class _HostScreenState extends State<HostScreen> {
                       },
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
 
                     // location
@@ -252,7 +252,7 @@ class _HostScreenState extends State<HostScreen> {
                     ),
 
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
@@ -269,7 +269,7 @@ class _HostScreenState extends State<HostScreen> {
                       },
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     const StyledTitleMedium("Distance"),
                     const SizedBox(
