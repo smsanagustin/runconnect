@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:runconnect/shared/styled_text.dart';
@@ -63,6 +64,21 @@ class _HostScreenState extends State<HostScreen> {
       return true;
     }
 
+    // get the address from the langitude and longitude positionsFuture<void> _getAddressFromLatLng(Position position) async {
+    Future<void> _getAddressFromLatLng(Position position) async {
+      await placemarkFromCoordinates(
+              _currentPosition!.latitude, _currentPosition!.longitude)
+          .then((List<Placemark> placemarks) {
+        Placemark place = placemarks[0];
+        setState(() {
+          _currentAddress =
+              "${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}";
+        });
+      }).catchError((e) {
+        debugPrint(e);
+      });
+    }
+
     // get current position of the user (latitude and longitude)
     Future<void> _getCurrentPosition() async {
       setState(() {
@@ -74,9 +90,8 @@ class _HostScreenState extends State<HostScreen> {
       await Geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.high)
           .then((Position position) {
-        setState(() {
-          _currentPosition = position;
-        });
+        setState(() => _currentPosition = position);
+        _getAddressFromLatLng(_currentPosition!);
       }).catchError((e) {
         debugPrint(e);
       });
@@ -208,7 +223,7 @@ class _HostScreenState extends State<HostScreen> {
                   ),
                   Text('LAT: ${_currentPosition?.latitude ?? ""}'),
                   Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-                  Text('DDRESS: ${_currentAddress ?? ""}'),
+                  Text('ADDRESS: ${_currentAddress ?? ""}'),
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: _getCurrentPosition,
