@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:runconnect/models/run_type.dart';
+import 'package:runconnect/shared/shared_styles.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
 
@@ -16,6 +20,7 @@ class _HostScreenState extends State<HostScreen> {
   // stores the date and time picked by the user
   TextEditingController dateInput = TextEditingController();
   TextEditingController timeInput = TextEditingController();
+  TextEditingController locationInput = TextEditingController();
 
   // stores current address and position
   String? _currentAddress;
@@ -44,6 +49,9 @@ class _HostScreenState extends State<HostScreen> {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
                 'Location services are disabled. Please turn on location.')));
+        setState(() {
+          _gettingCurrentPosition = false;
+        });
         return false;
       }
       permission = await Geolocator.checkPermission();
@@ -72,6 +80,7 @@ class _HostScreenState extends State<HostScreen> {
         Placemark place = placemarks[0];
         setState(() {
           _currentAddress = "${place.locality}, ${place.subAdministrativeArea}";
+          locationInput.text = _currentAddress!;
         });
       }).catchError((e) {
         debugPrint(e);
@@ -115,127 +124,177 @@ class _HostScreenState extends State<HostScreen> {
           ),
           backgroundColor: AppColors.primaryColor,
         ),
-        body: Form(
-            key: _formGlobalKey,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  // title
-                  TextFormField(
+        body: SingleChildScrollView(
+          child: Form(
+              key: _formGlobalKey,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // title
+                    TextFormField(
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.title),
+                          label: const StyledText("Run title"),
+                          border: textFieldBorder,
+                          focusedBorder: textFieldFocusedBorder,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Your event must have a name.";
+                          }
+                          return null;
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: dateInput,
                       decoration: InputDecoration(
-                        icon: const Icon(Icons.title),
-                        label: const StyledText("Run title"),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: AppColors.textColor)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: AppColors.textColor, width: 2.0)),
+                        icon: const Icon(Icons.calendar_today),
+                        label: const StyledText("Enter date"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
                       ),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate:
+                                DateTime.now().add(const Duration(days: 1)),
+                            firstDate:
+                                DateTime.now().add(const Duration(days: 1)),
+                            lastDate: DateTime(2100));
+                        if (pickedDate != null) {
+                          setState(() {
+                            // format the date picked by the user and store it
+                            dateInput.text =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                          });
+                        }
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Your event must have a name.";
+                          return "Your event must have a date.";
+                        } else {
+                          return null;
                         }
-                        return null;
-                      }),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: dateInput,
-                    decoration: InputDecoration(
-                      icon: const Icon(Icons.calendar_today),
-                      labelText: "Enter date",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.textColor)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              color: AppColors.textColor, width: 2.0)),
+                      },
                     ),
-                    readOnly: true,
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: timeInput,
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.schedule),
+                        label: const StyledText("Enter time"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
+                      ),
+                      readOnly: true,
+                      onTap: () async {
+                        TimeOfDay? pickedTime = await showTimePicker(
                           context: context,
-                          initialDate:
-                              DateTime.now().add(const Duration(days: 1)),
-                          firstDate:
-                              DateTime.now().add(const Duration(days: 1)),
-                          lastDate: DateTime(2100));
-                      if (pickedDate != null) {
-                        setState(() {
-                          // format the date picked by the user and store it
-                          dateInput.text =
-                              DateFormat('yyyy-MM-dd').format(pickedDate);
-                        });
-                      }
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Your event must have a date.";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: timeInput,
-                    decoration: InputDecoration(
-                      icon: const Icon(Icons.schedule),
-                      labelText: "Enter time",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: AppColors.textColor)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              color: AppColors.textColor, width: 2.0)),
-                    ),
-                    readOnly: true,
-                    onTap: () async {
-                      TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      if (pickedTime != null) {
-                        setState(() {
-                          // format the time picked by the user and store it
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (pickedTime != null) {
                           setState(() {
-                            timeInput.text = pickedTime.format(context);
+                            // format the time picked by the user and store it
+                            setState(() {
+                              timeInput.text = pickedTime.format(context);
+                            });
                           });
-                        });
-                      }
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Your event must have a time.";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  Text('LAT: ${_currentPosition?.latitude ?? ""}'),
-                  Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-                  Text('ADDRESS: ${_currentAddress ?? ""}'),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: _getCurrentPosition,
-                    child: _gettingCurrentPosition
-                        ? const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          )
-                        : const Text("Get Current Location"),
-                  )
-                ],
-              ),
-            )));
+                        }
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Your event must have a time.";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    // location
+                    TextFormField(
+                      controller: locationInput,
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.location_on),
+                        label: _gettingCurrentPosition
+                            ? const CircularProgressIndicator()
+                            : const StyledText("Tap to get current location"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
+                      ),
+                      readOnly: true,
+                      onTap: _getCurrentPosition,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "You must enter the location of this event.";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.location_on),
+                        label: const StyledText("Meetup place"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const StyledTitleMedium("Distance"),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.directions_run),
+                          label: const StyledText("Enter distance (in km)"),
+                          border: textFieldBorder,
+                          focusedBorder: textFieldFocusedBorder,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "You must specify the distance.";
+                          }
+                          return null;
+                        }),
+
+                    // type of run (dropdown)
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.edit_attributes),
+                        label: const StyledText("Select run type"),
+                        border: textFieldBorder,
+                        focusedBorder: textFieldFocusedBorder,
+                      ),
+                      items: RunTypes.values.map((runType) {
+                        return DropdownMenuItem(
+                          value: runType.title,
+                          child: Text(runType.title),
+                        );
+                      }).toList(),
+                      onChanged: (value) {},
+                    ),
+                  ],
+                ),
+              )),
+        ));
   }
 }
 
