@@ -11,6 +11,7 @@ plugins {
 android {
     namespace = "com.runconnect.app"
     compileSdk = flutter.compileSdkVersion
+    // compileSdkVersion = 31
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

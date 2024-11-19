@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
@@ -15,6 +16,11 @@ class _HostScreenState extends State<HostScreen> {
   TextEditingController dateInput = TextEditingController();
   TextEditingController timeInput = TextEditingController();
 
+  // stores current address and position
+  String? _currentAddress;
+  Position? _currentPosition;
+  bool _gettingCurrentPosition = false;
+
   @override
   void initState() {
     dateInput.text = ""; //set the initial value of text field
@@ -27,6 +33,59 @@ class _HostScreenState extends State<HostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // get user's permission to get their location
+    Future<bool> _handleLocationPermission() async {
+      bool serviceEnabled;
+      LocationPermission permission;
+
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                'Location services are disabled. Please turn on location.')));
+        return false;
+      }
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Location permissions are denied')));
+          return false;
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                'Location permissions are permanently denied, we cannot request permissions.')));
+        return false;
+      }
+      return true;
+    }
+
+    // get current position of the user (latitude and longitude)
+    Future<void> _getCurrentPosition() async {
+      setState(() {
+        _gettingCurrentPosition = true;
+      });
+
+      final hasPermission = await _handleLocationPermission();
+      if (!hasPermission) return;
+      await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high)
+          .then((Position position) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }).catchError((e) {
+        debugPrint(e);
+      });
+
+      setState(() {
+        _gettingCurrentPosition = false;
+      });
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Row(
@@ -147,6 +206,19 @@ class _HostScreenState extends State<HostScreen> {
                       }
                     },
                   ),
+                  Text('LAT: ${_currentPosition?.latitude ?? ""}'),
+                  Text('LNG: ${_currentPosition?.longitude ?? ""}'),
+                  Text('DDRESS: ${_currentAddress ?? ""}'),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: _getCurrentPosition,
+                    child: _gettingCurrentPosition
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(),
+                          )
+                        : const Text("Get Current Location"),
+                  )
                 ],
               ),
             )));
@@ -154,3 +226,4 @@ class _HostScreenState extends State<HostScreen> {
 }
 
 // REFERENCE: https://mobikul.com/date-picker-in-flutter/#:~:text=DatePicker%20is%20a%20material%20widget,by%20calling%20flutter's%20inbuilt%20function.
+// REFERENCE: https://fernandoptr.medium.com/how-to-get-users-current-location-address-in-flutter-geolocator-geocoding-be563ad6f66a#1cb3
