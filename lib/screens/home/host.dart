@@ -71,8 +71,7 @@ class _HostScreenState extends State<HostScreen> {
           .then((List<Placemark> placemarks) {
         Placemark place = placemarks[0];
         setState(() {
-          _currentAddress =
-              "${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}";
+          _currentAddress = "${place.locality}, ${place.subAdministrativeArea}";
         });
       }).catchError((e) {
         debugPrint(e);
