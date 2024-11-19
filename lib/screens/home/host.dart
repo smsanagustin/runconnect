@@ -233,10 +233,10 @@ class _HostScreenState extends State<HostScreen> {
                     TextFormField(
                       controller: locationInput,
                       decoration: InputDecoration(
-                        icon: const Icon(Icons.location_on),
-                        label: _gettingCurrentPosition
+                        icon: _gettingCurrentPosition
                             ? const CircularProgressIndicator()
-                            : const StyledText("Tap to get current location"),
+                            : const Icon(Icons.location_on),
+                        label: const StyledText("Tap to get current location"),
                         border: textFieldBorder,
                         focusedBorder: textFieldFocusedBorder,
                       ),
