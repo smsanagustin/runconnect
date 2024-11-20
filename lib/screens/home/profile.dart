@@ -38,7 +38,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-          child: Row(
+          child: Column(
             children: [
               appUser.isNotEmpty && appUser.first.fullName == ""
                   ? Expanded(
@@ -79,6 +79,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   MaterialPageRoute(
                                       builder: (ctx) => const EditProfile()));
                             }),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const StyledTitleMedium("Your runs"),
                         const SizedBox(
                           height: 20,
                         ),

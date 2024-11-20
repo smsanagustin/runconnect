@@ -21,25 +21,19 @@ class _UserRunsState extends ConsumerState<UserRuns> {
       user = appUserSet.first;
     }
 
-    return Column(
-      children: [
-        if (user != null && user.createdEventIds.isNotEmpty)
-          Flexible(
-            child: ListView.builder(
+    if (user != null && user.createdEventIds.isNotEmpty) {
+      return Expanded(
+          child: ListView.builder(
               itemCount: user.createdEventIds.length,
               itemBuilder: (_, index) {
                 return Column(
                   children: [
-                    const StyledTitleMedium("Your hosted runs"),
                     StyledText(user!.createdEventIds[index]),
                   ],
                 );
-              },
-            ),
-          )
-        else
-          const StyledText("You haven't hosted any runs yet.")
-      ],
-    );
+              }));
+    } else {
+      return const StyledText("You haven't hosted any runs yet.");
+    }
   }
 }

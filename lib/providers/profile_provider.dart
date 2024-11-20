@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:runconnect/models/app_user.dart';
-import 'package:runconnect/models/run_event.dart';
 import 'package:runconnect/services/user_firestore.dart';
 
 part 'profile_provider.g.dart';
