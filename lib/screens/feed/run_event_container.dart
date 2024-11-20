@@ -66,7 +66,7 @@ class _RunEventContainerState extends State<RunEventContainer> {
           ),
 
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
 
           // title
