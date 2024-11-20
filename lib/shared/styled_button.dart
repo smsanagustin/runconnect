@@ -51,7 +51,7 @@ class StyledButtonSmall extends StatelessWidget {
       style: FilledButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         backgroundColor:
-            color == "lightBlue" ? AppColors.primaryColor : Colors.white,
+            color == "lightBlue" ? AppColors.primaryColor : Colors.grey,
         side: BorderSide(color: AppColors.primaryColor, width: 1),
       ),
       onPressed: onPressed,

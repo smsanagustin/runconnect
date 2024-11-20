@@ -5,6 +5,7 @@ import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/models/run_event.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/event/run_event_details.dart';
+import 'package:runconnect/services/event_firestore.dart';
 import 'package:runconnect/services/user_firestore.dart';
 import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/shared/styled_text.dart';
@@ -40,6 +41,16 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
 
   @override
   Widget build(BuildContext context) {
+    void joinEvent(AppUser appUser, RunEvent runEvent) {
+      if (!runEvent.participants.contains(appUser.uid)) {
+        appUser.addJoinedEventId(runEvent.id!);
+        ref.read(profileNotifierProvider.notifier).updateUser(appUser);
+
+        runEvent.addParticipant(appUser.uid);
+        EventFirestoreService.updateEvent(runEvent);
+      }
+    }
+
     final appUser = ref.watch(profileNotifierProvider);
 
     return GestureDetector(
@@ -152,8 +163,21 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                         icon: Icon(Icons.comment_outlined,
                             color: AppColors.primaryColor)),
                     if (appUser.first.uid != widget.runEvent.creatorId)
+                      if (!widget.runEvent.participants
+                          .contains(appUser.first.uid))
+                        StyledButtonSmall(
+                            text: "Join",
+                            color: "lightBlue",
+                            onPressed: () {
+                              joinEvent(appUser.first, widget.runEvent);
+                            }),
+                    if (widget.runEvent.participants
+                        .contains(appUser.first.uid))
                       StyledButtonSmall(
-                          text: "Join", color: "lightBlue", onPressed: () {})
+                        text: "Joined",
+                        color: "grey",
+                        onPressed: () {},
+                      )
                   ],
                 )
               ],
