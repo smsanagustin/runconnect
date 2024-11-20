@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:runconnect/models/run_event.dart';
 import 'package:runconnect/providers/profile_provider.dart';
-import 'package:runconnect/providers/runs_provider.dart';
 import 'package:runconnect/screens/feed/run_event_container.dart';
+import 'package:runconnect/services/event_firestore.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
 
@@ -15,19 +16,19 @@ class FeedScreen extends ConsumerStatefulWidget {
 
 class _FeedScreenState extends ConsumerState<FeedScreen>
     with AutomaticKeepAliveClientMixin {
-  @override
-  void initState() {
-    ref.read(runsNotifierProvider.notifier).getAllEvents();
-
-    super.initState();
-  }
-
+  // @override
+  // void initState() {
+  //   ref.read(runsNotifierProvider.notifier).getAllEvents();
+  //
+  //   super.initState();
+  // }
+  //
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     final appUser = ref.watch(profileNotifierProvider);
-    final runEvents = ref.watch(runsNotifierProvider);
+    // final runEvents = ref.watch(runsNotifierProvider);
 
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -98,25 +99,55 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                   height: 20,
                 ),
 
+                StreamBuilder(
+                    stream: EventFirestoreService.getEvents(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (!snapshot.hasData ||
+                          snapshot.data!.docs.isEmpty) {
+                        return const Center(child: Text('No events available'));
+                      }
+
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            RunEvent event = snapshot.data!.docs[index].data();
+                            return Column(
+                              children: [
+                                RunEventContainer(runEvent: event),
+                                const SizedBox(
+                                  height: 10,
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      );
+                    }),
+
                 // list run events
-                if (runEvents.isNotEmpty)
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: runEvents.length,
-                      itemBuilder: (_, index) {
-                        return Column(
-                          children: [
-                            RunEventContainer(runEvent: runEvents[index]),
-                            const SizedBox(
-                              height: 10,
-                            )
-                          ],
-                        );
-                      },
-                    ),
-                  )
-                else
-                  const StyledTitleMedium("No runs yet. Come back later.")
+                // if (runEvents.isNotEmpty)
+                //   Expanded(
+                //     child: ListView.builder(
+                //       itemCount: runEvents.length,
+                //       itemBuilder: (_, index) {
+                //         return Column(
+                //           children: [
+                //             RunEventContainer(runEvent: runEvents[index]),
+                //             const SizedBox(
+                //               height: 10,
+                //             )
+                //           ],
+                //         );
+                //       },
+                //     ),
+                //   )
+                // else
+                //   const StyledTitleMedium("No runs yet. Come back later.")
               ],
             )));
   }

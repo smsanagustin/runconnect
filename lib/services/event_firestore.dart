@@ -10,8 +10,8 @@ class EventFirestoreService {
           toFirestore: (RunEvent e, _) => e.toFirestore());
 
   // get all events
-  static Future<QuerySnapshot<RunEvent>> getEvents() {
-    return eventRef.get();
+  static Stream<QuerySnapshot<RunEvent>> getEvents() {
+    return eventRef.snapshots();
   }
 
   // add a new event
