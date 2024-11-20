@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/providers/profile_provider.dart';
+import 'package:runconnect/screens/feed/run_event_container.dart';
+import 'package:runconnect/services/event_firestore.dart';
 import 'package:runconnect/shared/styled_text.dart';
 
 class UserRuns extends ConsumerStatefulWidget {
@@ -28,7 +30,28 @@ class _UserRunsState extends ConsumerState<UserRuns> {
               itemBuilder: (_, index) {
                 return Column(
                   children: [
-                    StyledText(user!.createdEventIds[index]),
+                    FutureBuilder(
+                        future: EventFirestoreService.getEvent(
+                            user!.createdEventIds[index]),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return const StyledText("There's an error.");
+                          } else if (snapshot.hasData) {
+                            return Column(
+                              children: [
+                                RunEventContainer(runEvent: snapshot.data!),
+                                const SizedBox(
+                                  height: 10,
+                                )
+                              ],
+                            );
+                          } else {
+                            return const StyledText("");
+                          }
+                        })
                   ],
                 );
               }));

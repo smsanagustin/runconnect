@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/models/run_event.dart';
-import 'package:runconnect/providers/run_event_creator.dart';
+import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/event/run_event_details.dart';
 import 'package:runconnect/services/user_firestore.dart';
 import 'package:runconnect/shared/styled_button.dart';
@@ -40,6 +40,8 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
 
   @override
   Widget build(BuildContext context) {
+    final appUser = ref.watch(profileNotifierProvider);
+
     return GestureDetector(
       onTap: () => _navigateToDetails(context, widget.runEvent),
       child: Container(
@@ -79,7 +81,6 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                   const SizedBox(
                     width: 10,
                   ),
-                  //const StyledText("Taylor Swift")
                   FutureBuilder(
                       future: fetchEventCreatorName(widget.runEvent.creatorId!),
                       builder: (context, snapshot) {
@@ -150,8 +151,9 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                         onPressed: () {},
                         icon: Icon(Icons.comment_outlined,
                             color: AppColors.primaryColor)),
-                    StyledButtonSmall(
-                        text: "Join", color: "lightBlue", onPressed: () {})
+                    if (appUser.first.uid != widget.runEvent.creatorId)
+                      StyledButtonSmall(
+                          text: "Join", color: "lightBlue", onPressed: () {})
                   ],
                 )
               ],

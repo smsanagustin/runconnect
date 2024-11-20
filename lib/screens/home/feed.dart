@@ -98,7 +98,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                 const SizedBox(
                   height: 20,
                 ),
-
                 StreamBuilder(
                     stream: EventFirestoreService.getEvents(),
                     builder: (context, snapshot) {
@@ -128,26 +127,6 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                         ),
                       );
                     }),
-
-                // list run events
-                // if (runEvents.isNotEmpty)
-                //   Expanded(
-                //     child: ListView.builder(
-                //       itemCount: runEvents.length,
-                //       itemBuilder: (_, index) {
-                //         return Column(
-                //           children: [
-                //             RunEventContainer(runEvent: runEvents[index]),
-                //             const SizedBox(
-                //               height: 10,
-                //             )
-                //           ],
-                //         );
-                //       },
-                //     ),
-                //   )
-                // else
-                //   const StyledTitleMedium("No runs yet. Come back later.")
               ],
             )));
   }
