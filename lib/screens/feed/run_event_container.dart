@@ -1,26 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/models/run_event.dart';
+import 'package:runconnect/providers/run_event_creator.dart';
 import 'package:runconnect/screens/event/run_event_details.dart';
+import 'package:runconnect/services/user_firestore.dart';
 import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
 
-class RunEventContainer extends StatefulWidget {
+class RunEventContainer extends ConsumerStatefulWidget {
   const RunEventContainer({super.key, required this.runEvent});
 
   final RunEvent runEvent;
 
   @override
-  State<RunEventContainer> createState() => _RunEventContainerState();
+  ConsumerState<RunEventContainer> createState() => _RunEventContainerState();
 }
 
-class _RunEventContainerState extends State<RunEventContainer> {
+class _RunEventContainerState extends ConsumerState<RunEventContainer> {
   void _navigateToDetails(BuildContext context, RunEvent runEvent) {
     Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => RunEventDetailsScreen(runEvent: runEvent)),
+          builder: (context) => RunEventDetailsScreen(
+                runEvent: runEvent,
+              )),
     );
+  }
+
+  Future<String?> fetchEventCreatorName(String id) async {
+    AppUser? appUser = await UserFirestoreService.getUser(id);
+
+    if (appUser != null) {
+      return appUser.fullName;
+    }
+    return null;
   }
 
   @override
@@ -64,7 +79,21 @@ class _RunEventContainerState extends State<RunEventContainer> {
                   const SizedBox(
                     width: 10,
                   ),
-                  const StyledText("Taylor Swift")
+                  //const StyledText("Taylor Swift")
+                  FutureBuilder(
+                      future: fetchEventCreatorName(widget.runEvent.creatorId!),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return const StyledText("There's an error.");
+                        } else if (snapshot.hasData) {
+                          return StyledText(snapshot.data!);
+                        } else {
+                          return const StyledText("User not found");
+                        }
+                      })
                 ]),
                 IconButton(
                     onPressed: () {},

@@ -16,7 +16,7 @@ class UserFirestoreService {
     await userRef.doc(appUser.uid).set(appUser);
   }
 
-  // get a user after they've signed in or signed up
+  // get a user
   static Future<AppUser?> getUser(String uid) async {
     final doc = await userRef.doc(uid).get();
     return doc.data();
