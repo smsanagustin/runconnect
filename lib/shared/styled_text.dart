@@ -17,6 +17,22 @@ class StyledText extends StatelessWidget {
   }
 }
 
+class StyledTextSmall extends StatelessWidget {
+  const StyledTextSmall(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(
+          fontFamily: "Cabin", color: Colors.white, fontSize: 10),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
 class StyledTextStrong extends StatelessWidget {
   const StyledTextStrong(this.text, {super.key});
   final String text;

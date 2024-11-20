@@ -9,6 +9,11 @@ class EventFirestoreService {
           fromFirestore: RunEvent.fromFirestore,
           toFirestore: (RunEvent e, _) => e.toFirestore());
 
+  // get all events
+  static Future<QuerySnapshot<RunEvent>> getEvents() {
+    return eventRef.get();
+  }
+
   // add a new event
   static Future<void> addEvent(RunEvent runEvent) async {
     await eventRef.doc(runEvent.id).set(runEvent);

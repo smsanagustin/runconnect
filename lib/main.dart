@@ -6,7 +6,6 @@ import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/providers/auth_provider.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/home/home.dart';
-import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/welcome/welcome_screen.dart';
 
 void main() async {

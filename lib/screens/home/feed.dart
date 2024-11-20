@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:runconnect/providers/profile_provider.dart';
+import 'package:runconnect/providers/runs_provider.dart';
+import 'package:runconnect/screens/feed/run_event_container.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
 
@@ -14,11 +18,21 @@ class FeedScreen extends ConsumerStatefulWidget {
 class _FeedScreenState extends ConsumerState<FeedScreen>
     with AutomaticKeepAliveClientMixin {
   @override
+  void initState() {
+    ref.read(runsNotifierProvider.notifier).getAllEvents();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
 
     final appUser = ref.watch(profileNotifierProvider);
+    final runEvents = ref.watch(runsNotifierProvider);
+
     return Scaffold(
+        backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
           title: appUser.isNotEmpty
               ? Row(
@@ -81,7 +95,30 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                           icon: const Icon(Icons.add_location_alt))
                     ],
                   ),
-                )
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                // list run events
+                if (runEvents.isNotEmpty)
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: runEvents.length,
+                      itemBuilder: (_, index) {
+                        return Column(
+                          children: [
+                            RunEventContainer(runEvent: runEvents[index]),
+                            const SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        );
+                      },
+                    ),
+                  )
+                else
+                  const StyledTitleMedium("No runs yet. Come back later.")
               ],
             )));
   }

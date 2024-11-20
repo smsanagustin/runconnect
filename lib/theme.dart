@@ -4,6 +4,7 @@ class AppColors {
   static Color primaryColor = const Color.fromRGBO(146, 211, 231, 1);
   static Color primaryAccent = const Color.fromRGBO(24, 75, 108, 1);
   static Color secondaryColor = const Color.fromRGBO(231, 166, 146, 1);
+  static Color backgroundColor = const Color.fromRGBO(247, 247, 247, 1);
   // static Color secondaryAccent = const Color.fromRGBO(35, 35, 35, 1);
   // static Color titleColor = const Color.fromRGBO(200, 200, 200, 1);
   static Color textColor = const Color.fromRGBO(24, 75, 108, 1);

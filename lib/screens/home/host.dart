@@ -1,19 +1,15 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/number_symbols_data.dart';
 import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/models/event_visibility.dart';
 import 'package:runconnect/models/run_event.dart';
 import 'package:runconnect/models/run_type.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/services/event_firestore.dart';
-import 'package:runconnect/services/user_firestore.dart';
 import 'package:runconnect/shared/shared_styles.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
