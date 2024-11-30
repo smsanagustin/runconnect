@@ -86,10 +86,13 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                         if (value == null || value.isEmpty) {
                           return "You must input a username.";
                         }
+                        if (value.trim().contains(' ')) {
+                          return "Username cannot contain spaces.";
+                        }
                         return null;
                       },
                       onSaved: (value) {
-                        _username = value!;
+                        _username = value!.trim();
                       },
                     ),
                     const SizedBox(
