@@ -1,3 +1,4 @@
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,7 @@ import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/home/home.dart';
 import 'package:runconnect/welcome/welcome_screen.dart';
 
+//
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

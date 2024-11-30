@@ -21,12 +21,14 @@ class RunEventContainer extends ConsumerStatefulWidget {
 }
 
 class _RunEventContainerState extends ConsumerState<RunEventContainer> {
-  void _navigateToDetails(BuildContext context, RunEvent runEvent) {
+  String creatorName = "";
+
+  void _navigateToDetails(
+      BuildContext context, RunEvent runEvent, String creatorName) {
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => RunEventDetailsScreen(
-                runEvent: runEvent,
-              )),
+              runEvent: runEvent, creatorName: creatorName)),
     );
   }
 
@@ -54,7 +56,7 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
     final appUser = ref.watch(profileNotifierProvider);
 
     return GestureDetector(
-      onTap: () => _navigateToDetails(context, widget.runEvent),
+      onTap: () => _navigateToDetails(context, widget.runEvent, creatorName),
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
@@ -92,6 +94,8 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                   const SizedBox(
                     width: 10,
                   ),
+
+                  // fetch name of the event creator
                   FutureBuilder(
                       future: fetchEventCreatorName(widget.runEvent.creatorId!),
                       builder: (context, snapshot) {
@@ -101,6 +105,7 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                         } else if (snapshot.hasError) {
                           return const StyledText("There's an error.");
                         } else if (snapshot.hasData) {
+                          creatorName = snapshot.data!;
                           return StyledText(snapshot.data!);
                         } else {
                           return const StyledText("User not found");

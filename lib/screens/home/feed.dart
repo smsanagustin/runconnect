@@ -76,7 +76,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding:
-                      const EdgeInsets.symmetric(vertical: 24, horizontal: 18),
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

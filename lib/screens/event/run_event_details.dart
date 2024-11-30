@@ -6,9 +6,11 @@ import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
 
 class RunEventDetailsScreen extends StatefulWidget {
-  const RunEventDetailsScreen({super.key, required this.runEvent});
+  const RunEventDetailsScreen(
+      {super.key, required this.runEvent, required this.creatorName});
 
   final RunEvent runEvent;
+  final String creatorName;
 
   @override
   State<RunEventDetailsScreen> createState() => _RunEventDetailsScreenState();
@@ -61,7 +63,7 @@ class _RunEventDetailsScreenState extends State<RunEventDetailsScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const StyledTextStrong("Taylor Swift"),
+                        StyledTextStrong(widget.creatorName),
                         StyledText(DateFormat('MMMM dd, yyyy')
                             .format(DateTime.parse(widget.runEvent.date!)))
                       ],
