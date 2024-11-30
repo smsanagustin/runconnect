@@ -43,6 +43,7 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
 
   @override
   Widget build(BuildContext context) {
+    // add the user to and event and add the event to the user's joined events
     void joinEvent(AppUser appUser, RunEvent runEvent) {
       if (!runEvent.participants.contains(appUser.uid)) {
         appUser.addJoinedEventId(runEvent.id!);
@@ -176,12 +177,18 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                             onPressed: () {
                               joinEvent(appUser.first, widget.runEvent);
                             }),
+                    // disable button when the user has already joined the event
                     if (widget.runEvent.participants
                         .contains(appUser.first.uid))
                       StyledButtonSmall(
                         text: "Joined",
                         color: "grey",
-                        onPressed: () {},
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "You've already joined this event!")));
+                        },
                       )
                   ],
                 )
