@@ -146,11 +146,11 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
             ),
 
             // details
-            StyledText("Distance: ${widget.runEvent.distance}k"),
+            StyledText("Distance: ${widget.runEvent.distance}K"),
             StyledText(
                 "When: ${DateFormat('MMMM dd, yyyy').format(DateTime.parse(widget.runEvent.date!))}"),
-            const StyledText("Where: Silang, Cavite"),
-            const StyledText("Meetup place: Jollibee Bayan"),
+            StyledText("Where: ${widget.runEvent.location}"),
+            StyledText("Meetup place: ${widget.runEvent.meetupPlace}"),
             const SizedBox(
               height: 10,
             ),
