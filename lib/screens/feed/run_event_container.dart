@@ -161,7 +161,7 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 StyledTextStrong(
-                    "Joined: ${widget.runEvent.participants.length}/5"),
+                    "Joined: ${widget.runEvent.participants.length}/${widget.runEvent.numberOfParticipants}"),
                 Row(
                   children: [
                     IconButton(
