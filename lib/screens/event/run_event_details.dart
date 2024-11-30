@@ -160,6 +160,16 @@ class _RunEventDetailsScreenState extends State<RunEventDetailsScreen> {
               ],
             ),
             const Divider(),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            // participants
+            const StyledTitleMedium("Participants"),
+
+            //TODO:  show the icons of the participants instead of their names
+            // then user can just click on it.
           ],
         ),
       ),
