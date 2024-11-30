@@ -173,9 +173,18 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                             label: const StyledText("Username"),
                             border: textFieldBorder,
                             focusedBorder: textFieldFocusedBorder),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "You must input a username.";
+                          }
+                          if (value.trim().contains(' ')) {
+                            return "Username cannot contain spaces.";
+                          }
+                          return null;
+                        },
                         onSaved: (value) {
                           if (value != null) {
-                            _newUsername = value;
+                            _newUsername = value.trim();
                           }
                         },
                       ),
