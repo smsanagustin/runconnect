@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/profile/profile_details.dart';
@@ -43,6 +44,19 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
     if (appUser.isNotEmpty) {
       user = appUser.first;
+    }
+
+    // change user profile picture
+    void changeProfilePicture() async {
+      // choose image
+      print("hello");
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      print("hello");
+
+      // upload to firestore
+      // show and persist the image in the ap
     }
 
     // get address methods TODO: refactor this so that it's in one file and it's not repeated
@@ -130,7 +144,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
               children: [
                 const ProfileDetails(),
                 TextButton(
-                    onPressed: () {}, child: const StyledText("Change photo")),
+                    onPressed: changeProfilePicture,
+                    child: const StyledTextSmall("Change photo")),
                 const SizedBox(
                   height: 30,
                 ),
