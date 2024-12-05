@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
@@ -49,13 +50,18 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     // change user profile picture
     void changeProfilePicture() async {
       // choose image
-      print("hello");
       final ImagePicker picker = ImagePicker();
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image == null) return;
-      print("hello");
 
-      // upload to firestore
+      // upload to firestore if user has details had been fetched
+      if (user != null) {
+        final storageRef = FirebaseStorage.instance.ref();
+        final imageRef = storageRef.child("${user.uid}.jpg");
+        final imageBytes = await image.readAsBytes();
+        await imageRef.putData(imageBytes);
+      }
+
       // show and persist the image in the ap
     }
 
@@ -145,7 +151,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                 const ProfileDetails(),
                 TextButton(
                     onPressed: changeProfilePicture,
-                    child: const StyledTextSmall("Change photo")),
+                    child: const StyledText("Change photo")),
                 const SizedBox(
                   height: 30,
                 ),
@@ -258,6 +264,9 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                               // show snackbar
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
+
+                              // go back to previous page
+                              Navigator.pop(context);
                             }
                           }
                         },
