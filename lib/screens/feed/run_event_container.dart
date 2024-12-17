@@ -6,10 +6,10 @@ import 'package:runconnect/models/run_event.dart';
 import 'package:runconnect/providers/profile_provider.dart';
 import 'package:runconnect/screens/event/run_event_details.dart';
 import 'package:runconnect/services/event_firestore.dart';
-import 'package:runconnect/services/user_firestore.dart';
 import 'package:runconnect/shared/styled_button.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
+import 'package:runconnect/utils/shared_methods.dart';
 
 class RunEventContainer extends ConsumerStatefulWidget {
   const RunEventContainer({super.key, required this.runEvent});
@@ -30,15 +30,6 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
           builder: (context) => RunEventDetailsScreen(
               runEvent: runEvent, creatorName: creatorName)),
     );
-  }
-
-  Future<String?> fetchEventCreatorName(String id) async {
-    AppUser? appUser = await UserFirestoreService.getUser(id);
-
-    if (appUser != null) {
-      return appUser.fullName;
-    }
-    return null;
   }
 
   @override

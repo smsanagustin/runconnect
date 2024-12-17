@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:runconnect/models/app_user.dart';
 import 'package:runconnect/models/run_event.dart';
 import 'package:runconnect/shared/styled_text.dart';
 import 'package:runconnect/theme.dart';
+import 'package:runconnect/utils/shared_methods.dart';
 
 class RunEventDetailsScreen extends StatefulWidget {
   const RunEventDetailsScreen(
@@ -17,6 +17,18 @@ class RunEventDetailsScreen extends StatefulWidget {
 }
 
 class _RunEventDetailsScreenState extends State<RunEventDetailsScreen> {
+  Future<List<String>> fetchAllParticipantNames(
+      List<String> participantIds) async {
+    List<String> names = [];
+    for (String id in participantIds) {
+      String? name = await fetchEventCreatorName(id);
+      if (name != null) {
+        names.add(name);
+      }
+    }
+    return names;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,9 +179,27 @@ class _RunEventDetailsScreenState extends State<RunEventDetailsScreen> {
 
             // participants
             const StyledTitleMedium("Participants"),
+            FutureBuilder<List<String>>(
+              future: fetchAllParticipantNames(widget.runEvent.participants),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return const StyledText("There's an error.");
+                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:
+                        snapshot.data!.map((name) => StyledText(name)).toList(),
+                  );
+                } else {
+                  return const StyledText("No participants yet.");
+                }
+              },
+            )
 
             //TODO:  show the icons of the participants instead of their names
-            // then user can just click on it.
+            // then user can just click on it. future feature since Firebase is paid :(
           ],
         ),
       ),
