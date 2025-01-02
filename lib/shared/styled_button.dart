@@ -16,8 +16,12 @@ class StyledButton extends StatelessWidget {
     return FilledButton(
       style: FilledButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        backgroundColor: color == "blue" ? AppColors.textColor : Colors.white,
-        side: BorderSide(color: AppColors.textColor, width: 1),
+        backgroundColor:
+            color == "blue" ? AppColors.primaryColor : Colors.white,
+        side: BorderSide(
+            color:
+                color == "blue" ? AppColors.primaryColor : AppColors.textColor,
+            width: 1),
       ),
       onPressed: onPressed,
       child: Padding(
@@ -25,9 +29,8 @@ class StyledButton extends StatelessWidget {
         child: Text(text,
             style: TextStyle(
                 fontFamily: "Cabin",
-                color: color == "blue"
-                    ? AppColors.primaryColor
-                    : AppColors.textColor,
+                color:
+                    color == "blue" ? AppColors.textColor : AppColors.textColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 20)),
       ),
