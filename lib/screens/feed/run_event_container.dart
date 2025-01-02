@@ -159,7 +159,8 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                         onPressed: () {},
                         icon: Icon(Icons.comment_outlined,
                             color: AppColors.primaryColor)),
-                    if (appUser.first.uid != widget.runEvent.creatorId)
+                    if (appUser.isNotEmpty &&
+                        appUser.first.uid != widget.runEvent.creatorId)
                       if (!widget.runEvent.participants
                           .contains(appUser.first.uid))
                         StyledButtonSmall(

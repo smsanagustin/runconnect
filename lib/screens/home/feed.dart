@@ -68,37 +68,38 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
         ),
         body: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(8),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14, horizontal: 18),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.directions_run),
+                            appUser.isNotEmpty
+                                ? StyledTitleMedium(
+                                    "Runs near ${appUser.first.location.split(',').first}") // show only the locality
+                                : const StyledTitleMedium("Runs near you"),
+                          ],
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.add_location_alt))
+                      ],
+                    ),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.directions_run),
-                          appUser.isNotEmpty
-                              ? StyledTitleMedium(
-                                  "Runs near ${appUser.first.location.split(',').first}") // show only the locality
-                              : const StyledTitleMedium("Runs near you"),
-                        ],
-                      ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.add_location_alt))
-                    ],
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                StreamBuilder(
+                  StreamBuilder(
                     stream: EventFirestoreService.getEvents(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -110,24 +111,26 @@ class _FeedScreenState extends ConsumerState<FeedScreen>
                         return const Center(child: Text('No events available'));
                       }
 
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            RunEvent event = snapshot.data!.docs[index].data();
-                            return Column(
-                              children: [
-                                RunEventContainer(runEvent: event),
-                                const SizedBox(
-                                  height: 10,
-                                )
-                              ],
-                            );
-                          },
-                        ),
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          RunEvent event = snapshot.data!.docs[index].data();
+                          return Column(
+                            children: [
+                              RunEventContainer(runEvent: event),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ],
+                          );
+                        },
                       );
-                    }),
-              ],
+                    },
+                  ),
+                ],
+              ),
             )));
   }
 
