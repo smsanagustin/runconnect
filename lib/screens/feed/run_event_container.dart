@@ -34,7 +34,7 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
 
   @override
   Widget build(BuildContext context) {
-    // add the user to and event and add the event to the user's joined events
+    // add the user to an event and add the event to the user's joined events
     void joinEvent(AppUser appUser, RunEvent runEvent) {
       if (!runEvent.participants.contains(appUser.uid)) {
         appUser.addJoinedEventId(runEvent.id!);
@@ -42,6 +42,17 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
 
         runEvent.addParticipant(appUser.uid);
         EventFirestoreService.updateEvent(runEvent);
+      }
+    }
+
+    void saveEvent(AppUser appUser, RunEvent runEvent) {
+      // if the event hasn't been saved yet, save it to local storage and to firestore
+      if (!appUser.bookmarkedEventIds.contains(runEvent.id)) {
+        // updateUser already handles saving to firestore
+        appUser.addBookmarkedEventId(runEvent.id!);
+        ref
+            .read(profileNotifierProvider.notifier)
+            .updateUser(appUser); // firestore
       }
     }
 
@@ -104,8 +115,14 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                         }
                       })
                 ]),
+
+                // save / bookmark button
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      saveEvent(appUser.first, widget.runEvent);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Event saved!")));
+                    },
                     icon: Icon(
                       Icons.bookmark_outline,
                       color: AppColors.primaryColor,
