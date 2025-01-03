@@ -17,9 +17,12 @@ class ProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final appUser = ref.watch(profileNotifierProvider); // returns a set
 
     return Scaffold(
@@ -109,4 +112,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ));
   }
+
+  // preserve this page's state
+  @override
+  bool get wantKeepAlive => true;
 }
