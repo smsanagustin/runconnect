@@ -45,11 +45,17 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
       }
     }
 
-    void saveEvent(AppUser appUser, RunEvent runEvent) {
+    void toggleSaveEvent(AppUser appUser, RunEvent runEvent) {
       // if the event hasn't been saved yet, save it to local storage and to firestore
       if (!appUser.bookmarkedEventIds.contains(runEvent.id)) {
         // updateUser already handles saving to firestore
         appUser.addBookmarkedEventId(runEvent.id!);
+        ref
+            .read(profileNotifierProvider.notifier)
+            .updateUser(appUser); // firestore
+      } else {
+        // if user has saved it before, remove it from the saved events
+        appUser.removeBookmarkedEventId(runEvent.id!);
         ref
             .read(profileNotifierProvider.notifier)
             .updateUser(appUser); // firestore
@@ -119,9 +125,13 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                 // save / bookmark button
                 IconButton(
                     onPressed: () {
-                      saveEvent(appUser.first, widget.runEvent);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Event saved!")));
+                      toggleSaveEvent(appUser.first, widget.runEvent);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          // show snackbar based on whether user saves or unsaves the event
+                          content: Text(appUser.first.bookmarkedEventIds
+                                  .contains(widget.runEvent.id)
+                              ? "Saved event!"
+                              : "Unsaved event!")));
                     },
                     icon: Icon(
                       appUser.first.bookmarkedEventIds
