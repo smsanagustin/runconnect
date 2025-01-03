@@ -124,7 +124,10 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                           const SnackBar(content: Text("Event saved!")));
                     },
                     icon: Icon(
-                      Icons.bookmark_outline,
+                      appUser.first.bookmarkedEventIds
+                              .contains(widget.runEvent.id)
+                          ? Icons.bookmark
+                          : Icons.bookmark_outline,
                       color: AppColors.primaryColor,
                     ))
               ],
