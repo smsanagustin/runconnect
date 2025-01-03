@@ -17,6 +17,25 @@ class StyledText extends StatelessWidget {
   }
 }
 
+class StyledUnderlinedText extends StatelessWidget {
+  const StyledUnderlinedText(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+          fontFamily: "Cabin",
+          color: AppColors.textColor,
+          fontSize: 15,
+          decoration: TextDecoration.underline),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
 class StyledTextBold extends StatelessWidget {
   const StyledTextBold(this.text, {super.key});
   final String text;

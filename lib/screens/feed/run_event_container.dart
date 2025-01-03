@@ -170,8 +170,9 @@ class _RunEventContainerState extends ConsumerState<RunEventContainer> {
                               joinEvent(appUser.first, widget.runEvent);
                             }),
                     // disable button when the user has already joined the event
-                    if (widget.runEvent.participants
-                        .contains(appUser.first.uid))
+                    if (appUser.isNotEmpty &&
+                        widget.runEvent.participants
+                            .contains(appUser.first.uid))
                       StyledButtonSmall(
                         text: "Joined",
                         color: "grey",

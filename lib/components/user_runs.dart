@@ -6,8 +6,14 @@ import 'package:runconnect/screens/feed/run_event_container.dart';
 import 'package:runconnect/services/event_firestore.dart';
 import 'package:runconnect/shared/styled_text.dart';
 
+/*
+ This widget fetches all the runs created by the
+  current logged in user and displays it.
+*/
+
 class UserRuns extends ConsumerStatefulWidget {
-  const UserRuns({super.key});
+  const UserRuns(this.user, {super.key});
+  final AppUser user;
 
   @override
   ConsumerState<UserRuns> createState() => _UserRunsState();
@@ -16,14 +22,9 @@ class UserRuns extends ConsumerStatefulWidget {
 class _UserRunsState extends ConsumerState<UserRuns> {
   @override
   Widget build(BuildContext context) {
-    final appUserSet = ref.watch(profileNotifierProvider);
-    AppUser? user;
+    AppUser user = widget.user;
 
-    if (appUserSet.isNotEmpty) {
-      user = appUserSet.first;
-    }
-
-    if (user != null && user.createdEventIds.isNotEmpty) {
+    if (user.createdEventIds.isNotEmpty) {
       return Expanded(
           child: ListView.builder(
               itemCount: user.createdEventIds.length,
